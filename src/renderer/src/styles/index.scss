@@ -1,0 +1,62 @@
+@use './variable.scss';
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+  background: #fff;
+}
+
+/* 表格统一样式 */
+.el-table .el-table__header-wrapper thead th,
+.el-table .el-table__fixed-header-wrapper thead th {
+  padding: 0;
+  background-color: #f9f9f9;
+  height: 50px;
+  line-height: 40px;
+  color: #283543;
+}
+
+.grid-button {
+  flex: 0 0 calc(50% - 40px); /* 每个按钮占50%的宽度，并减去间距 */
+  height: 80px; /* 按钮高度 */
+  font-size: 18px; /* 按钮字体大小 */
+  text-align: center; /* 按钮文本居中 */
+}
+
+.right-back {
+  position: fixed; /* 固定在页面右侧 */
+  top: 85%; /* 垂直居中 */
+  right: 20px; /* 距离右边界 20px */
+  // transform: translateY(-50%); /* 修正垂直居中的偏移 */
+  display: flex; /* 启用 Flexbox 布局 */
+  flex-direction: column; /* 图标垂直排列 */
+  gap: 15px; /* 图标之间的间距 */
+  z-index: 999;
+}
+
+.el-button {
+  margin: 0;
+}
+
+.form-item {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  gap: 10px; /* 标签与选择器之间的间距 */
+  margin-top: 20px;
+  margin-left: 20px;
+
+  .selector {
+    width: 240px;
+  }
+}
+
+.label {
+  font-size: 16px;
+  min-width: 65px; /* 确保宽度一致，便于对齐 */
+  // text-align: right;
+}
+
+.sub-title {
+  font-weight: bold;
+}
