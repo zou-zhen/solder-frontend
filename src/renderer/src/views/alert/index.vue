@@ -5,7 +5,7 @@
         <el-date-picker
           v-model="alertInterval"
           type="datetimerange"
-          range-separator="To"
+          range-separator="到"
           start-placeholder="Start date"
           end-placeholder="End date"
           size="large"
@@ -15,6 +15,7 @@
       </div>
 
       <div class="form-item">
+        <el-config-provider :locale="zhCn">
         <el-pagination
           v-model:current-page="page"
           v-model:page-size="pageSize"
@@ -24,6 +25,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
+        </el-config-provider>
         <el-button type="primary" size="large" @click="handleQuery">查询</el-button>
       </div>
       <div class="form-item">
@@ -48,6 +50,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import recordApi, { AlarmResponse } from '@renderer/api/record/index'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 const loading = ref(true)
 // 定义报警信息的接口
