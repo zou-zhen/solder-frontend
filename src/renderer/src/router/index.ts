@@ -325,17 +325,18 @@ router.beforeEach((to, _from, next) => {
   // 放行登录页面
   if (to.path === '/home') {
     return next()
+  } else {
+    // 获取token
+    const token = localStorage.getItem('access_token')
+
+    if (!token) {
+      return next('/login')
+    } else {
+      console.log('kkk')
+
+      next()
+    }
   }
-  // 获取token
-  // const token = localStorage.getItem('access_token')
-
-  // if (!token) {
-  //   return next('/login')
-  // } else {
-  //   console.log('kkk')
-
-  //   next()
-  // }
   return next()
 })
 
