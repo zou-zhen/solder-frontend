@@ -28,6 +28,10 @@ const getAlarms = (data: {
   return http.post('/alarm/get_alarms', data) as Promise<AlarmResponse>
 }
 
+const clearAlarms = () => {
+  return http.post('/alarm/clear_alarms', {}) as Promise<AlarmResponse>
+}
+
 const getSolderFlowRecords = (data: {
   solder_code?: string
   start_date?: string
@@ -41,5 +45,6 @@ const getSolderFlowRecords = (data: {
 export default {
   getTemperatureRecords,
   getAlarms,
+  clearAlarms,
   getSolderFlowRecords
 }
