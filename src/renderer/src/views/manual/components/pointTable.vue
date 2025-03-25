@@ -37,11 +37,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 表格内容：分页 -->
-    <el-pagination 
-      v-model:current-page="page"
-      @current-change="handleCurrentChange"
-      background layout="prev, pager, next" :total="stationList.length" />
 
     <template #footer>
       <span class="dialog-footer">
@@ -72,7 +67,6 @@ const props = defineProps({
 })
 
 const editVisible = ref(false)
-const page = ref(1)
 const loading = ref(true)
 const stationList = ref([])
 const selectedArea = ref('')
@@ -87,6 +81,7 @@ const stationData = ref({
     StaType: ''
   }
 })
+const total = ref(0)
 
 const reset = () => {
   stationData.value.formData = {
@@ -169,7 +164,7 @@ const handleClose = (done: () => void) => {
 const getList = () => {
   loading.value = true
   stationApi
-    .getStationByArea({ area: selectedArea.value, page: page.value })
+    .getStationByArea({ area: selectedArea.value })
     .then((res: any) => {
       loading.value = false
       if (res.code === 0) {
@@ -180,10 +175,6 @@ const getList = () => {
       loading.value = false
       console.log(err)
     })
-}
-const handleCurrentChange = (newPage: number) => {
-  page.value = newPage
-  getList()
 }
 const tableHeight = ref(400) // 初始高度
 
