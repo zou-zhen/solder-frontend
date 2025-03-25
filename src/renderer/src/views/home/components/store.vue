@@ -270,8 +270,8 @@ onUnmounted(() => {
 }
 
 .circle {
-  width: 10px; /* 圆点的宽度 */
-  height: 10px; /* 圆点的高度 */
+  width: 40px; /* 圆点的宽度 */
+  height: 40px; /* 圆点的高度 */
   background-color: red; /* 圆点的颜色 */
   border-radius: 50%; /* 设置为圆形 */
   display: inline-block; /* 内联块级元素，方便排列 */
