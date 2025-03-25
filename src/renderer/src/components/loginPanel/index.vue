@@ -80,6 +80,7 @@ import { ipcRenderer } from 'electron'
 // import { clearToken } from '@renderer/utils/auth'
 import { clearToken } from '@renderer/utils/auth'
 import userApi from '@renderer/api/user/index'
+import { setToken } from '@renderer/utils/auth'
 const ICInputRef = ref(null)
 const curLoadType = ref<'IC' | 'Account' | 'face'>('IC')
 const focusInput = () => {
@@ -154,7 +155,9 @@ let inactivityTimer: null | NodeJS.Timeout = null
 const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
   if (type === 'face') {
     userApi.faceDetect().then((res: any) => {
-      if (res.code === 0) {
+      if (res.data && res.code === 0) {
+        setToken(res.data.token)
+        useStore.token = res.data.accessToken
         emit('login')
       } else {
         ElMessage.error(res.data.message)

@@ -1,6 +1,7 @@
 import { setToken, clearToken } from '@renderer/utils/auth'
 import { defineStore } from 'pinia'
 import user from '@renderer/api/auth/user'
+import userApi from '@renderer/api/user/index'
 import { LoginData, LoginResult } from '@renderer/api/auth/types'
 
 export const useUserStore = defineStore('user', {
@@ -27,6 +28,18 @@ export const useUserStore = defineStore('user', {
         console.log(res)
 
         setToken(data.token) // Save token to localstorage
+        this.token = data.accessToken
+      }
+
+      return res
+    },
+    async faceLogin() {
+      const res: any = await userApi.faceDetect()
+      if (res) {
+        const { data } = res
+        console.log(res)
+
+        setToken(data.token)
         this.token = data.accessToken
       }
 

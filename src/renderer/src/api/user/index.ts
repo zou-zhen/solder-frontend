@@ -29,7 +29,7 @@ const faceCollect = (data: { user_id: string }) => {
 }
 
 const faceDetect = () => {
-  return http.get('/user/face_detect')
+  return http.post('/user/face_detect', {})
 }
 
 export default {
