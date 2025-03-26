@@ -266,17 +266,21 @@ const onClick = (fnName: string) => {
     curFunc.value = fnName
     handleLogin()
   } else {
-    // 获取token
     const token = localStorage.getItem('access_token')
-
-    if (token) { //如果已经登陆过了，且令牌没有过期，那么进入某个页面可以直接跳转过去，不用再进入登录弹框去登录了
+    if (token) {
       curFunc.value = fnName
       handleLogin()
     } else {
-      loginVisible.value = true
+    //   loginVisible.value = true
+    loginVisible.value = false
+    // 添加提示信息
+    ElMessage({
+        message: '请先登录',
+        type: 'warning',
+        duration: 3000
+      })
       curFunc.value = fnName
     }
-    
   }
 }
 const handleLogin = () => {

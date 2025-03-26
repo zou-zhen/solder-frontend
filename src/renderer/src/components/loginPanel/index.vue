@@ -80,7 +80,6 @@ import { ipcRenderer } from 'electron'
 // import { clearToken } from '@renderer/utils/auth'
 import { clearToken } from '@renderer/utils/auth'
 import userApi from '@renderer/api/user/index'
-import { setToken } from '@renderer/utils/auth'
 const ICInputRef = ref(null)
 const curLoadType = ref<'IC' | 'Account' | 'face'>('IC')
 const focusInput = () => {
@@ -155,9 +154,7 @@ let inactivityTimer: null | NodeJS.Timeout = null
 const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
   if (type === 'face') {
     userApi.faceDetect().then((res: any) => {
-      if (res.data && res.code === 0) {
-        setToken(res.data.token)
-        useStore.token = res.data.accessToken
+      if (res.code === 0) {
         emit('login')
       } else {
         ElMessage.error(res.data.message)
@@ -208,13 +205,9 @@ const cancelLogin = () => {
   dialogVisible.value = false // 隐藏对话框
 }
 
+
 // 确认登录
 const confirmLogin = () => {
-  // if (!form.account || !form.password) {
-  //   return alert('Please fill in both account and password')
-  // }
-  // emit('login', form) // 通知父组件登录成功，传递表单数据
-  // dialogVisible.value = false // 隐藏对话框
   if (!ruleFormRef.value) return
   ruleFormRef.value.validate(async (valid) => {
     if (valid) {
@@ -228,7 +221,8 @@ const confirmLogin = () => {
         }
         const res = await useStore.login(loginData)
         if (res.data && res.code === 0) {
-          emit('login')
+          // 登录成功，传递账号信息
+          emit('login', form.value.id) 
         } else {
           ElMessage.error(res.data || '登录失败')
         }
@@ -242,6 +236,40 @@ const confirmLogin = () => {
     }
   })
 }
+// // 确认登录
+// const confirmLogin = () => {
+//   // if (!form.account || !form.password) {
+//   //   return alert('Please fill in both account and password')
+//   // }
+//   // emit('login', form) // 通知父组件登录成功，传递表单数据
+//   // dialogVisible.value = false // 隐藏对话框
+//   if (!ruleFormRef.value) return
+//   ruleFormRef.value.validate(async (valid) => {
+//     if (valid) {
+//       isLoggingIn.value = true // 开始加载
+//       try {
+//         let loginData = {}
+//         if (curLoadType.value === 'IC') {
+//           loginData = { user_ic: form.value.user_ic, password: '', id: '' }
+//         } else if (curLoadType.value === 'Account') {
+//           loginData = { password: form.value.password, id: form.value.id, user_ic: '' }
+//         }
+//         const res = await useStore.login(loginData)
+//         if (res.data && res.code === 0) {
+//           emit('login')
+//         } else {
+//           ElMessage.error(res.data || '登录失败')
+//         }
+//       } catch (error) {
+//         ElMessage.error('发生错误')
+//       } finally {
+//         isLoggingIn.value = false // 加载完成
+//       }
+//     } else {
+//       return false
+//     }
+//   })
+// }
 
 // 视频
 const video = ref<HTMLVideoElement | null>(null)
