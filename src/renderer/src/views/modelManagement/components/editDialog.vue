@@ -61,6 +61,16 @@
         <el-input v-model="form.ready_out_num" :placeholder="'请输入待取数量'" clearable></el-input>
       </el-form-item>
       <el-form-item
+        label="搅拌规则"
+        prop="JiaobanRule"
+        :rules="[{ required: true, message: '请选择搅拌规则', trigger: 'blur' }]"
+      >
+      <el-select v-model="form.if_jiaoban" placeholder="请选择" clearable>
+          <el-option label="自动搅拌" value="自动搅拌"></el-option>
+          <el-option label="出库搅拌" value="出库搅拌"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item
         label="搅拌时间（秒）"
         prop="stir_time"
         :rules="[{ required: true, message: '请输入搅拌时间（秒）', trigger: 'blur' }]"
