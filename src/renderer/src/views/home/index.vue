@@ -257,9 +257,27 @@ const formatText = (current, total) => {
   return () => `${current}/${total}` // 自定义为比例形式
 }
 
+//const onClick = (fnName: string) => {
+//  loginVisible.value = true
+//  curFunc.value = fnName
+//}
 const onClick = (fnName: string) => {
-  loginVisible.value = true
-  curFunc.value = fnName
+  if (fnName === 'alert') {
+    curFunc.value = fnName
+    handleLogin()
+  } else {
+    // 获取token
+    const token = localStorage.getItem('access_token')
+
+    if (token) { //如果已经登陆过了，且令牌没有过期，那么进入某个页面可以直接跳转过去，不用再进入登录弹框去登录了
+      curFunc.value = fnName
+      handleLogin()
+    } else {
+      loginVisible.value = true
+      curFunc.value = fnName
+    }
+    
+  }
 }
 const handleLogin = () => {
   loginVisible.value = false

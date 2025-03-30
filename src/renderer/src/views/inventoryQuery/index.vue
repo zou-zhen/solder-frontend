@@ -59,15 +59,93 @@
         />
         <el-table-column prop="StationID" label="所在工位" />
         <el-table-column prop="StaArea" label="所在区域" />
-        <!-- <el-table-column prop="address" label="到期日期" /> -->
-        <el-table-column prop="StorageUser" label="入柜人" />
-        <el-table-column prop="StorageDateTime" label="入柜时间" />
-        <el-table-column prop="OrderUser" label="预约人" />
-        <el-table-column prop="OutDateTime" label="预约时间" />
-        <el-table-column prop="RewarmStartDateTime" label="回温开始时间" />
-        <el-table-column prop="RewarmEndDateTime" label="回温结束时间" />
-        <el-table-column prop="StirStartDateTime" label="搅拌开始时间" />
-        <!-- <el-table-column prop="address" label="搅拌结束时间" /> -->
+        <el-table-column
+          prop="StorageUser"
+          label="入柜人"
+          width="150"
+          :filters="userList.map(user => ({ text: user.user_name, value: user.user_id }))"
+          :filter-method="filterStorageUser"
+        >
+          <template #default="scope">
+            {{ scope.row.StorageUser }}
+          </template>
+        </el-table-column>
+        <el-table-column label="入柜时间" width="180">
+          <template #header>
+            <span style="cursor: pointer" @click="handleTimeSort('storageTime')">
+              入柜时间
+              <el-icon>
+                <component :is="timeSort.storageTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+              </el-icon>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.StorageDateTime }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="OrderUser"
+          label="预约人"
+          width="150"
+          :filters="userList.map(user => ({ text: user.user_name, value: user.user_id }))"
+          :filter-method="filterOrderUser"
+        >
+          <template #default="scope">
+            {{ scope.row.OrderUser }}
+          </template>
+        </el-table-column>
+        <el-table-column label="预约时间" width="180">
+          <template #header>
+            <span style="cursor: pointer" @click="handleTimeSort('outTime')">
+              预约时间
+              <el-icon>
+                <component :is="timeSort.outTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+              </el-icon>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.OrderDateTime }}
+          </template>
+        </el-table-column>
+        <el-table-column label="回温开始时间" width="180">
+          <template #header>
+            <span style="cursor: pointer" @click="handleTimeSort('rewarmStartTime')">
+              回温开始时间
+              <el-icon>
+                <component :is="timeSort.rewarmStartTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+              </el-icon>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.RewarmStartDateTime }}
+          </template>
+        </el-table-column>
+        <el-table-column label="回温结束时间" width="180">
+          <template #header>
+            <span style="cursor: pointer" @click="handleTimeSort('rewarmEndTime')">
+              回温结束时间
+              <el-icon>
+                <component :is="timeSort.rewarmEndTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+              </el-icon>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.RewarmEndDateTime }}
+          </template>
+        </el-table-column>
+        <el-table-column label="搅拌开始时间" width="180">
+          <template #header>
+            <span style="cursor: pointer" @click="handleTimeSort('stirStartTime')">
+              搅拌开始时间
+              <el-icon>
+                <component :is="timeSort.stirStartTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+              </el-icon>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.StirStartDateTime }}
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" min-width="120">
           <template #default="scope">
             <el-button
@@ -85,9 +163,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import inventoryApi, { queryType } from '@renderer/api/inventory/index'
 import reservationApi from '@renderer/api/reservation/index'
+import userApi from '@renderer/api/user'
 import { ElMessage } from 'element-plus'
 
 const processOptions = ref([
@@ -115,6 +194,14 @@ const loading = ref(true)
 const inventoryList = ref([])
 const curProcess = ref('')
 const curModel = ref('')
+const userList = ref([])
+const timeSort = ref({
+  storageTime: 'desc',
+  outTime: 'desc',
+  rewarmStartTime: 'desc',
+  rewarmEndTime: 'desc',
+  stirStartTime: 'desc'
+})
 
 // 自定义过滤方法
 const filterError = (value, row) => {
@@ -124,19 +211,46 @@ const filterError = (value, row) => {
   return true
 }
 
+const filterStorageUser = (value: string, row) => {
+  if (!value) return true
+  return row.StorageUser === value
+}
+
+const filterOrderUser = (value: string, row) => {
+  if (!value) return true
+  return row.OrderUser === value
+}
+
+const handleTimeSort = (field: string) => {
+  timeSort.value[field] = timeSort.value[field] === 'asc' ? 'desc' : 'asc'
+  getList()
+}
+
+const getUserList = () => {
+  userApi.getUserList().then((res) => {
+    if (res.code === 0) {
+      userList.value = res.data
+    }
+  })
+}
+
 const getList = (params: queryType = { model: '', StaArea: '' }) => {
   loading.value = true
   inventoryApi
-    .getSolder(params)
-    .then((res: any) => {
+    .getSolder({
+      ...params,
+      sort_field: Object.entries(timeSort.value).find(([, value]) => value !== 'desc')?.[0],
+      sort_order: Object.values(timeSort.value).find(value => value !== 'desc') || 'desc'
+    })
+    .then((res) => {
       loading.value = false
       if (res.code === 0) {
         inventoryList.value = res.data
       }
     })
-    .catch((err) => {
+    .catch((error: Error) => {
       loading.value = false
-      console.log(err)
+      console.log(error)
     })
 }
 
@@ -150,11 +264,9 @@ const handelQueryReset = () => {
 }
 
 const getSolderModelList = () => {
-  // inventoryApi
-  //   .getSolderModelList()
   reservationApi
     .getSolderModelsType()
-    .then((res: any) => {
+    .then((res: ModelResponse) => {
       if (res.code === 0) {
         modelOptions.value = res.data.map((item: string) => {
           return { label: item, value: item }
@@ -163,36 +275,39 @@ const getSolderModelList = () => {
         ElMessage({
           message: res.data,
           type: 'error',
-          duration: 3000 // 显示时长，默认3000ms
+          duration: 3000
         })
       }
     })
-    .catch((err) => {
-      console.log(err)
+    .catch((error: Error) => {
+      console.log(error)
     })
 }
 
-const handleTakeOut = (_index: number, row) => {
-  inventoryApi.outSolder({ solder_code: row.SolderCode }).then((res: any) => {
+const handleTakeOut = (_index: number, row: { SolderCode: string }) => {
+  inventoryApi.outSolder({ solder_code: row.SolderCode }).then((res: InventoryResponse) => {
     if (res.code === 0) {
       ElMessage({
         message: '取出成功！',
         type: 'success',
-        duration: 3000 // 显示时长，默认3000ms
+        duration: 3000
       })
     } else {
       ElMessage({
         message: '取出失败',
         type: 'error',
-        duration: 3000 // 显示时长，默认3000ms
+        duration: 3000
       })
     }
     getList()
   })
 }
 
-getList()
-getSolderModelList()
+onMounted(() => {
+  getList()
+  getSolderModelList()
+  getUserList()
+})
 </script>
 
 <style scoped lang="scss">

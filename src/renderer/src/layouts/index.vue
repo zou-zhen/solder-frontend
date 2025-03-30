@@ -57,6 +57,7 @@
       <div class="flex"></div>
       <div style="display: flex; flex-direction: column; margin-top: 10px; width: 25%">
         <div class="tag-block" style="margin-right: 10px; height: 45%;display: flex; justify-content:flex-end">
+          <el-button class="el-button" @click="logout">退出账号</el-button>
           <el-button :icon="Refresh" class="el-button" @click="debouncedReload">刷新</el-button>
           <el-button
             class="el-button"
@@ -206,9 +207,27 @@ const onClick = (fnName: string) => {
     curFunc.value = fnName
     handleLogin()
   } else {
-    loginVisible.value = true
-    curFunc.value = fnName
+    // 获取token
+    const token = localStorage.getItem('access_token')
+
+    if (token) { //如果已经登陆过了，且令牌没有过期，那么进入某个页面可以直接跳转过去，不用再进入登录弹框去登录了
+      curFunc.value = fnName
+      handleLogin()
+    } else {
+      loginVisible.value = true
+      curFunc.value = fnName
+    }
+
   }
+}
+// 新增退出账号方法
+const logout = () => {
+  // 清除本地存储中的 token
+  localStorage.removeItem('access_token')
+  // 跳转到登录页面
+  //router.push('/login')这个页面已经弃用了，直接跳转到首页/home
+  //loginVisible.value = true
+  router.push('/home')
 }
 
 // 使用 setInterval 更新时间

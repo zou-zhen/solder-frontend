@@ -42,17 +42,69 @@
             />
           </div>
           <div class="form-item">
+            <el-pagination
+              v-model:current-page="solderQueryParams.page"
+              v-model:page-size="solderQueryParams.page_size"
+              :page-sizes="[10, 20, 50, 100]"
+              :total="total"
+              :page-size-opts="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            >
+              <template #total>
+                共 {{ total }} 条
+              </template>
+              <template #sizes="{ item }">
+                {{ item.value }} 条/页
+              </template>
+              <template #jumper>
+                前往 <el-input v-model="solderQueryParams.page" /> 页
+              </template>
+            </el-pagination>
             <el-button type="primary" size="large" @click="handleSolderQuery">查询</el-button>
             <el-button type="primary" size="large" @click="handleSolderReset">重置</el-button>
           </div>
         </div>
+        
         <div style="padding: 20px">
           <el-table v-loading="solderLoading" :data="solderRecordList" stripe max-height="800">
-            <el-table-column prop="SolderCode" label="锡膏码" width="180" />
-            <el-table-column prop="UserID" label="工号" width="180" />
-            <el-table-column prop="UserName" label="用户" />
-            <el-table-column prop="Type" label="类型" />
-            <el-table-column prop="DateTime" label="时间" />
+            <el-table-column prop="SolderCode" label="锡膏码" width="800" show-overflow-tooltip />
+            <el-table-column prop="UserID" label="工号" width="120" />
+            <el-table-column label="用户" width="150">
+              <template #header>
+                <el-select
+                  v-model="selectedUser"
+                  placeholder="选择用户"
+                  clearable
+                  @change="handleUserFilter"
+                >
+                  <el-option
+                    v-for="user in userList"
+                    :key="user.user_id"
+                    :label="user.user_name"
+                    :value="user.user_id"
+                  />
+                </el-select>
+              </template>
+              <template #default="scope">
+                {{ scope.row.UserName }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="Type" label="类型" width="120" />
+            <el-table-column label="时间" width="180">
+              <template #header>
+                <span style="cursor: pointer" @click="handleTimeSort">
+                  时间
+                  <el-icon>
+                    <component :is="sortOrder === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
+                  </el-icon>
+                </span>
+              </template>
+              <template #default="scope">
+                {{ scope.row.DateTime }}
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-tab-pane>
@@ -71,10 +123,42 @@
             />
           </div>
           <div class="form-item">
+            
+            <el-pagination
+              v-model:current-page="temperQueryParams.page"
+              v-model:page-size="temperQueryParams.page_size"
+              :page-sizes="[10, 20, 50, 100]"
+              :total="temperTotal"
+              :page-size-opts="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleTemperSizeChange"
+              @current-change="handleTemperCurrentChange"
+            >
+              <template #total>
+                共 {{ temperTotal }} 条
+              </template>
+              <template #sizes="{ item }">
+                {{ item.value }} 条/页
+              </template>
+              <template #jumper>
+                前往 <el-input v-model="temperQueryParams.page" /> 页
+              </template>
+            </el-pagination>
+          
             <el-button type="primary" size="large" @click="handleTemperQuery">查询</el-button>
           </div>
         </div>
         <div ref="chart" style="width: 100%; height: 600px"></div>
+        
+        <div style="padding: 20px">
+          <el-table v-loading="temperLoading" :data="temperRecordList" stripe max-height="800">
+            <el-table-column prop="ReTemper" label="回温温度" />
+            <el-table-column prop="ColdTemperS" label="冷藏温度S" />
+            <el-table-column prop="ColdTemperM" label="冷藏温度M" />
+            <el-table-column prop="ColdTemperD" label="冷藏温度D" />
+            <el-table-column prop="DateTime" label="时间" />
+          </el-table>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -87,7 +171,13 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import router from '../../router/index'
-import recordApi from '@renderer/api/record/index'
+import recordApi, { 
+  TemperatureResponse, 
+  UserResponse, 
+  SolderFlowResponse,
+  User 
+} from '@renderer/api/record/index'
+import userApi from '@renderer/api/user'
 import * as echarts from 'echarts'
 
 const options = ref([
@@ -101,6 +191,10 @@ const options = ref([
   }
 ])
 
+const userList = ref<User[]>([])
+const selectedUser = ref('')
+const sortOrder = ref<'asc' | 'desc'>('desc')
+
 const temperLoading = ref(true)
 const temperRecordList = ref([])
 const temperInterval = ref([])
@@ -110,10 +204,21 @@ const solderInterval = ref([])
 const solderQueryParams = ref({
   solder_code: '',
   user_id: null,
-  record_type: ''
+  record_type: '',
+  page: 1,
+  page_size: 10,
+  sort_order: 'desc'
 })
 const chart = ref(null)
 const activeName = ref('solder')
+const total = ref(0)
+const temperQueryParams = ref({
+  start_date: '',
+  end_date: '',
+  page: 1,
+  page_size: 10
+})
+const temperTotal = ref(0)
 
 const handleTemperQuery = () => {
   // console.log('temperInterval', temperInterval)
@@ -128,9 +233,53 @@ const handleSolderReset = () => {
   solderQueryParams.value = {
     solder_code: '',
     user_id: null,
-    record_type: ''
+    record_type: '',
+    page: 1,
+    page_size: 10,
+    sort_order: 'desc'
   }
   solderInterval.value = []
+  getSolderList()
+}
+
+const handleSizeChange = (val: number) => {
+  solderQueryParams.value.page_size = val
+  getSolderList()
+}
+
+const handleCurrentChange = (val: number) => {
+  solderQueryParams.value.page = val
+  getSolderList()
+}
+
+const handleTemperSizeChange = (val: number) => {
+  temperQueryParams.value.page_size = val
+  getTemperList()
+}
+
+const handleTemperCurrentChange = (val: number) => {
+  temperQueryParams.value.page = val
+  getTemperList()
+}
+
+const getUserList = () => {
+  userApi.getUserList().then((res: UserResponse) => {
+    if (res.code === 0) {
+      console.log('用户列表如下：')
+      console.log(res.data)
+      userList.value = res.data
+      userList.value.unshift({ user_id: '', user_name: '全部用户' })
+    }
+  })
+}
+
+const handleUserFilter = (value: string) => {
+  selectedUser.value = value
+  getSolderList()
+}
+
+const handleTimeSort = () => {
+  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   getSolderList()
 }
 
@@ -141,13 +290,17 @@ const getSolderList = () => {
       start_date: solderInterval.value?.[0],
       end_date: solderInterval.value?.[1],
       solder_code: solderQueryParams.value.solder_code,
-      user_id: solderQueryParams.value.user_id,
-      record_type: solderQueryParams.value.record_type
+      user_id: selectedUser.value || null,
+      record_type: solderQueryParams.value.record_type,
+      page: solderQueryParams.value.page,
+      page_size: solderQueryParams.value.page_size,
+      sort_order: sortOrder.value
     })
-    .then((res: any) => {
+    .then((res: SolderFlowResponse) => {
       solderLoading.value = false
       if (res.code === 0) {
-        solderRecordList.value = res.data
+        solderRecordList.value = res.data.list
+        total.value = res.data.total
       }
     })
     .catch((err) => {
@@ -161,12 +314,15 @@ const getTemperList = () => {
   recordApi
     .getTemperatureRecords({
       start_date: temperInterval.value?.[0] || '2000-01-01',
-      end_date: temperInterval.value?.[1] || '2080-01-01'
+      end_date: temperInterval.value?.[1] || '2080-01-01',
+      page: temperQueryParams.value.page,
+      page_size: temperQueryParams.value.page_size
     })
-    .then((res: any) => {
+    .then((res: TemperatureResponse) => {
       temperLoading.value = false
       if (res.code === 0) {
-        temperRecordList.value = res.data
+        temperRecordList.value = res.data.list
+        temperTotal.value = res.data.total
         initCharts()
       }
     })
@@ -260,7 +416,9 @@ const initCharts = () => {
 
 getSolderList()
 
-onMounted(() => {})
+onMounted(() => {
+  getUserList()
+})
 
 watch(activeName, (newVal) => {
   if (newVal === 'solder') {
@@ -310,5 +468,15 @@ const goHome = () => {
 
 .el-button {
   margin: 0;
+}
+
+.el-pagination {
+  :deep(.el-pagination__total) {
+    margin-right: 16px;
+  }
+  
+  :deep(.el-pagination__sizes) {
+    margin-right: 16px;
+  }
 }
 </style>
