@@ -13,7 +13,7 @@
         <el-table-column prop="min_cold_num" label="最小冷藏数量" />
         <el-table-column prop="rewarm_num" label="保持回温数量" />
         <el-table-column prop="ready_out_num" label="待取数量" />
-        <el-table-column prop="JiaobanRule" label="搅拌规则" />
+        <el-table-column prop="jiaoban_rule" label="搅拌规则" />
         <el-table-column prop="stir_time" label="搅拌时间（秒）" />
         <el-table-column prop="stir_speed" label="搅拌速度(转/分钟)" />
         <el-table-column prop="rewarm_time" label="回温时间(分钟)" />

@@ -149,21 +149,7 @@ const ruleFormRef = ref()
 //   password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
 // })
 
-let inactivityTimer: null | NodeJS.Timeout = null
 
-const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
-  if (type === 'face') {
-    userApi.faceDetect().then((res: any) => {
-      if (res.code === 0) {
-        emit('login')
-      } else {
-        ElMessage.error(res.data.message)
-      }
-    })
-  } else {
-    curLoadType.value = type
-  }
-}
 
 // 关闭对话框前的逻辑
 const handleClose = (done: () => void) => {
@@ -205,13 +191,34 @@ const cancelLogin = () => {
   dialogVisible.value = false // 隐藏对话框
 }
 
-// 确认登录
+let inactivityTimer: null | NodeJS.Timeout = null
+// 新增变量
+const isLoggedIn = ref(!!localStorage.getItem('user_id'))
+const userId = ref(localStorage.getItem('user_id'))
+// 登录（主要处理人脸登录）
+const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
+  if (type === 'face') {
+    userApi.faceDetect().then((res: any) => {
+      if (res.code === 0) {
+        const user_id = res.data.user_id; 
+        // 将 user_id 存储到 localStorage 中
+        localStorage.setItem('user_id', user_id); 
+        // 更新 userId 的值
+        userId.value = user_id; 
+        // 更新登录状态
+        isLoggedIn.value = true; 
+        emit('login', user_id)
+      } else {
+        ElMessage.error(res.data.message)
+      }
+    })
+  } else {
+    curLoadType.value = type
+  }
+}
+
+// 确认登录（主要处理账号登录/IC卡登录）
 const confirmLogin = () => {
-  // if (!form.account || !form.password) {
-  //   return alert('Please fill in both account and password')
-  // }
-  // emit('login', form) // 通知父组件登录成功，传递表单数据
-  // dialogVisible.value = false // 隐藏对话框
   if (!ruleFormRef.value) return
   ruleFormRef.value.validate(async (valid) => {
     if (valid) {
@@ -225,7 +232,13 @@ const confirmLogin = () => {
         }
         const res = await useStore.login(loginData)
         if (res.data && res.code === 0) {
-          emit('login')
+          // 登录成功，传递账号信息
+          if (form.value.id !== '') {
+            emit('login', form.value.id)
+          } else if(form.value.user_ic !== ''){
+            emit('login', form.value.user_ic)
+          }
+          
         } else {
           ElMessage.error(res.data || '登录失败')
         }
@@ -239,6 +252,40 @@ const confirmLogin = () => {
     }
   })
 }
+// // 确认登录
+// const confirmLogin = () => {
+//   // if (!form.account || !form.password) {
+//   //   return alert('Please fill in both account and password')
+//   // }
+//   // emit('login', form) // 通知父组件登录成功，传递表单数据
+//   // dialogVisible.value = false // 隐藏对话框
+//   if (!ruleFormRef.value) return
+//   ruleFormRef.value.validate(async (valid) => {
+//     if (valid) {
+//       isLoggingIn.value = true // 开始加载
+//       try {
+//         let loginData = {}
+//         if (curLoadType.value === 'IC') {
+//           loginData = { user_ic: form.value.user_ic, password: '', id: '' }
+//         } else if (curLoadType.value === 'Account') {
+//           loginData = { password: form.value.password, id: form.value.id, user_ic: '' }
+//         }
+//         const res = await useStore.login(loginData)
+//         if (res.data && res.code === 0) {
+//           emit('login')
+//         } else {
+//           ElMessage.error(res.data || '登录失败')
+//         }
+//       } catch (error) {
+//         ElMessage.error('发生错误')
+//       } finally {
+//         isLoggingIn.value = false // 加载完成
+//       }
+//     } else {
+//       return false
+//     }
+//   })
+// }
 
 // 视频
 const video = ref<HTMLVideoElement | null>(null)

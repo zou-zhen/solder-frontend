@@ -19,13 +19,13 @@
       <div class="form-item">
         <el-button type="primary" size="large" @click="handleoutSolder">取出</el-button>
       </div>
-      <div class="form-item">
+      <!-- <div class="form-item">
         <span style="color: blue">自动搅拌</span>
-      </div>
+      </div> -->
     </div>
     <div style="padding: 20px">
       <div style="font-weight: bold">可以取出的锡膏列表</div>
-      <el-table v-model="lengcangLoading" :data="lengcangList" stripe max-height="500">
+      <el-table v-model="outLoading" :data="outList" stripe max-height="500">
         <el-table-column prop="SolderCode" label="锡膏码" width="180" />
         <el-table-column prop="Model" label="型号" />
         <el-table-column prop="Station" label="区域" />
@@ -59,13 +59,13 @@ const modelOptions = ref<{ label: string; value: string }[]>([])
 const curModel = ref('')
 const daiquLoading = ref(true)
 const daiquList = ref([])
-const lengcangLoading = ref(true)
-const lengcangList = ref([])
+const outLoading = ref(true)
+const outList = ref([])
 
 const getDaiquList = () => {
   daiquLoading.value = true
   outboundApi
-    .getDaiquSolder(0)
+    .getDaiquSolder()
     .then((res: any) => {
       daiquLoading.value = false
       if (res.code === 0) {
@@ -77,19 +77,19 @@ const getDaiquList = () => {
       console.log(err)
     })
 }
-
-const getLengcangList = () => {
-  lengcangLoading.value = true
+//可取出的列表
+const getAccessibleList = () => {
+  outLoading.value = true
   outboundApi
-    .getDaiquSolder(2)
+    .getAccessibleSolder()
     .then((res: any) => {
-      lengcangLoading.value = false
+      outLoading.value = false
       if (res.code === 0) {
-        lengcangList.value = res.data
+        outList.value = res.data
       }
     })
     .catch((err) => {
-      lengcangLoading.value = false
+      outLoading.value = false
       console.log(err)
     })
 }
@@ -127,7 +127,7 @@ const handleoutSolder = () => {
           duration: 3000 // 显示时长，默认3000ms
         })
         getDaiquList()
-        getLengcangList()
+        getAccessibleList()
       } else {
         ElMessage({
           message: res.data,
@@ -142,7 +142,7 @@ const handleoutSolder = () => {
 }
 
 getDaiquList()
-getLengcangList()
+getAccessibleList()
 getSolderModelList()
 
 const storeOutNum = ref(null)

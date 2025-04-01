@@ -34,18 +34,6 @@
             </template>
             <el-button>最新{{ falseCount }}条报警</el-button>
           </el-tooltip>
-          <!-- <span
-            v-if="falseCount > 0"
-            style="
-              color: #bd3124;
-              max-width: 300px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            "
-            >{{ Object.keys(alertInfo).filter((key) => alertInfo[key])[0] }}</span
-          >
-          <span v-if="falseCount > 1" style="color: #bd3124"> 等{{ falseCount }}条报警 </span> -->
           <el-button
             size="small"
             style="background-color: #e99d42; color: black; border-color: #e99d42"
@@ -57,7 +45,8 @@
       <div class="flex"></div>
       <div style="display: flex; flex-direction: column; margin-top: 10px; width: 25%">
         <div class="tag-block" style="margin-right: 10px; height: 45%;display: flex; justify-content:flex-end">
-          <el-button class="el-button" @click="logout">退出账号</el-button>
+          <!-- 新增登录/退出按钮 -->
+          <el-button class="el-button" @click="toggleLogin">{{ isLoggedIn ? '退出' : '登录' }}</el-button>
           <el-button :icon="Refresh" class="el-button" @click="debouncedReload">刷新</el-button>
           <el-button
             class="el-button"
@@ -72,6 +61,8 @@
           >
         </div>
         <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">{{ currentTime }}</span>
+        <!-- 显示当前用户信息 -->
+        <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">当前用户：{{ userId || '无' }}</span>
         <div class="tag-block" style="margin-right: 10px;height:35%;display: flex; justify-content:flex-end">
           <el-tag type="primary" class="el-tag">{{ statusStore.modeName }}</el-tag>
           <el-tag type="success" class="el-tag">报警</el-tag>
@@ -96,10 +87,6 @@
       <i class="iconfont icon-xitong"></i>
       <span>系统配置</span>
     </div>
-    <!-- <div class="function-item" @click="router.push('/system')">
-      <i class="iconfont icon-xitong"></i>
-      <span>系统配置</span>
-    </div> -->
     <div class="function-item" @click="onClick('manual')">
       <i class="iconfont icon-jixiebi"></i>
       <span>示教</span>
@@ -113,10 +100,6 @@
       <i class="iconfont icon-xinghaoguanli"></i>
       <span>型号管理</span>
     </div>
-    <!-- <div class="function-item" @click="router.push('/modelManagement')">
-      <i class="iconfont icon-xinghaoguanli"></i>
-      <span>型号管理</span>
-    </div> -->
     <div class="function-item" @click="onClick('alert')">
       <i class="iconfont icon-00-baojingjilu-05-05"></i>
       <span>报警记录</span>
@@ -125,10 +108,6 @@
       <i class="iconfont icon-xunjianshujujilu"></i>
       <span>数据记录</span>
     </div>
-    <!-- <div class="function-item" @click="router.push('dataLog')">
-      <i class="iconfont icon-xunjianshujujilu"></i>
-      <span>数据记录</span>
-    </div> -->
   </el-drawer>
   <login-panel v-model:visible="loginVisible" @login="handleLogin"></login-panel>
 </template>
@@ -149,10 +128,7 @@ const currentRoute = useRoute()
 const currentTime = ref('')
 const drawer = ref(false)
 const eventSourceGroup = ref<Array<EventSource>>([])
-const alertInfo = ref({
-  
-})
-// 定义变量并赋值
+const alertInfo = ref({})
 const filteredAlertKeys = computed(() => {
   return Object.keys(alertInfo.value).filter((key) => alertInfo.value[key])
 })
@@ -161,9 +137,29 @@ statusStore.getMode()
 
 const loginVisible = ref(false)
 const curFunc = ref('')
-
-const handleLogin = () => {
+// 新增变量
+const isLoggedIn = ref(!!localStorage.getItem('user_id'))
+const userId = ref(localStorage.getItem('user_id'))
+// 超时自动退出登录
+let logoutTimer: ReturnType<typeof setTimeout> | null = null; // 定义一个定时器变量
+// account：loginPanel处理（登录/确认登录时）emit过来的user_id
+const handleLogin = (account: string) => {
   loginVisible.value = false
+  // 假设登录成功后返回 user_id
+  const user_id = account 
+  localStorage.setItem('user_id', user_id)
+  userId.value = user_id
+  isLoggedIn.value = true
+  // 超时自动退出登录
+  // 清除之前的定时器（如果有的话）
+  if (logoutTimer) {
+    clearTimeout(logoutTimer);
+  }
+  // 设置新的定时器，1 分钟后自动退出登录
+  logoutTimer = setTimeout(() => {
+    logout();
+  }, 60000); // 10 分钟 = 600000 毫秒
+
   switch (curFunc.value) {
     case 'alert':
       router.push('/alert')
@@ -207,30 +203,48 @@ const onClick = (fnName: string) => {
     curFunc.value = fnName
     handleLogin()
   } else {
-    // 获取token
-    const token = localStorage.getItem('access_token')
-
-    if (token) { //如果已经登陆过了，且令牌没有过期，那么进入某个页面可以直接跳转过去，不用再进入登录弹框去登录了
+    // const token = localStorage.getItem('access_token')
+    // if (token) {
+    const user_id = localStorage.getItem('user_id')
+    if (user_id) {
       curFunc.value = fnName
       handleLogin()
     } else {
-      loginVisible.value = true
+      // 添加提示信息:请先去登录按钮登录，而不再是直接在这里弹出登录框
+      loginVisible.value = false
+      ElMessage({
+          message: '请先登录',
+          type: 'warning',
+          duration: 3000
+        })
       curFunc.value = fnName
     }
-
   }
 }
-// 新增退出账号方法
+
 const logout = () => {
-  // 清除本地存储中的 token
+  localStorage.removeItem('user_id')
   localStorage.removeItem('access_token')
-  // 跳转到登录页面
-  //router.push('/login')这个页面已经弃用了，直接跳转到首页/home
-  //loginVisible.value = true
+  userId.value = null
+  isLoggedIn.value = false
   router.push('/home')
+  // 超时自动退出登录
+  // 清除定时器
+  if (logoutTimer) {
+    clearTimeout(logoutTimer);
+    logoutTimer = null;
+  }
 }
 
-// 使用 setInterval 更新时间
+// 新增函数
+const toggleLogin = () => {
+  if (isLoggedIn.value) {
+    logout()
+  } else {
+    loginVisible.value = true
+  }
+}
+
 const updateTime = () => {
   const now = new Date()
   currentTime.value = `${now.toLocaleDateString('zh-CN', {
@@ -244,7 +258,6 @@ const updateTime = () => {
   })}`
 }
 
-// 计算值为 false 的数量
 const falseCount = computed(() => Object.values(alertInfo.value).filter((value) => value).length)
 
 const onSetSport = (action: string, tag: number) => {
@@ -253,15 +266,13 @@ const onSetSport = (action: string, tag: number) => {
       ElMessage({
         message: '操作成功！',
         type: 'success',
-        duration: 3000 // 显示时长，默认3000ms
+        duration: 3000
       })
-
-      // getList()
     } else {
       ElMessage({
         message: res.data,
         type: 'error',
-        duration: 3000 // 显示时长，默认3000ms
+        duration: 3000
       })
     }
   })
@@ -269,51 +280,27 @@ const onSetSport = (action: string, tag: number) => {
 
 const connectSSE = (url: string, retryLimit = 5) => {
   const retryCount = 0
-
   const attemptConnection = () => {
     const eventSource = new EventSource('http://127.0.0.1:5000' + url)
-
-    // 监听数据事件
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data)
-
       if (url === '/stream/get_warn_states') {
-        // console.log('data', data)
         alertInfo.value = data
       }
     }
-
-    // 错误事件处理
-    // eventSource.onerror = () => {
-    //   retryCount++
-    //   console.warn(`SSE 连接错误：${url}，重试次数：${retryCount}`)
-    //   eventSource.close()
-
-    //   if (retryCount >= retryLimit) {
-    //     console.error(`连接 ${url} 失败，已达最大重试次数 ${retryLimit}`)
-    //     return
-    //   }
-
-    //   // 自动重试，延迟 2 秒
-    //   setTimeout(attemptConnection, 2000)
-    // }
-
     eventSourceGroup.value.push(eventSource)
   }
-
-  attemptConnection() // 开始首次连接
+  attemptConnection()
 }
 
-// 防抖函数，确保每 1 秒内只触发一次
 const debouncedReload = debounce(() => {
-  // 通过 IPC 发送刷新请求到主进程
   window.location.reload()
-}, 1000) // 1000 毫秒 = 1 秒
+}, 1000)
 
 onMounted(() => {
   connectSSE('/stream/get_warn_states')
-  updateTime() // 初始化时间
-  setInterval(updateTime, 1000) // 每秒更新一次
+  updateTime()
+  setInterval(updateTime, 1000)
 })
 
 onUnmounted(() => {
@@ -322,6 +309,7 @@ onUnmounted(() => {
   })
 })
 </script>
+
 <style lang="less">
 .tooltip-size {
   max-width: 500px;
@@ -339,7 +327,6 @@ onUnmounted(() => {
   background-color: #4095e5;
   opacity: 0.8;
   color: white;
-  // line-height: 10vh;
   font-size: 30px;
   display: flex;
   justify-content: center;
@@ -379,7 +366,6 @@ onUnmounted(() => {
   align-content: center;
   gap: 5px;
   font-size: 20px;
-  // height: 100%;
   width: 30%;
 }
 
@@ -392,7 +378,6 @@ onUnmounted(() => {
 .time-display {
   color: white;
   font-size: 20px;
-  // margin-top: 5px;
   text-align: right;
   margin-right: 35px;
 }
@@ -405,21 +390,21 @@ onUnmounted(() => {
 
 .function-item {
   display: flex;
-  flex-direction: column; /* 图标在文字上方 */
-  align-items: center; /* 居中对齐 */
-  justify-content: center; /* 可选：垂直方向居中 */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin: 20px 0; /* 可选：增加间距 */
+  margin: 20px 0;
   cursor: pointer;
 }
 
 .function-item i {
-  font-size: 60px; /* 根据需要调整图标大小 */
-  margin-bottom: 5px; /* 图标与文字之间的间距 */
+  font-size: 60px;
+  margin-bottom: 5px;
 }
 
 .function-item span {
-  font-size: 20px; /* 调整文字大小 */
+  font-size: 20px;
   font-weight: 500;
 }
 

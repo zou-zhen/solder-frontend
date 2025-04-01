@@ -62,10 +62,10 @@
       </el-form-item>
       <el-form-item
         label="搅拌规则"
-        prop="JiaobanRule"
+        prop="jiaoban_rule"
         :rules="[{ required: true, message: '请选择搅拌规则', trigger: 'blur' }]"
       >
-      <el-select v-model="form.if_jiaoban" placeholder="请选择" clearable>
+      <el-select v-model="form.jiaoban_rule" placeholder="请选择" clearable>
           <el-option label="自动搅拌" value="自动搅拌"></el-option>
           <el-option label="出库搅拌" value="出库搅拌"></el-option>
         </el-select>

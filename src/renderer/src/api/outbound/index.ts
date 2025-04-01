@@ -1,7 +1,10 @@
 import http from '../../utils/http/http'
 
-const getDaiquSolder = (type: 0 | 2) => {
-  return http.post('/solder/daiqu_solder', {type})
+const getDaiquSolder = () => {
+  return http.get('/solder/daiqu_solder')
+}
+const getAccessibleSolder = () => {
+  return http.get('/solder/accessible_solder')
 }
 
 const getLengcangSolder = () => {
@@ -14,6 +17,7 @@ const outSolder = (data: { model_type: string; amount: number | null }) => {
 
 export default {
   getDaiquSolder,
+  getAccessibleSolder,
   getLengcangSolder,
   outSolder
 }
