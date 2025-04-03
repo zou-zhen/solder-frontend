@@ -36,7 +36,19 @@
           </template>
         </el-table-column>
         <el-table-column prop="twice_chaoshi_jinzhi_in_binggui" label="二次超时禁入冰柜（小时）" />
-
+        <el-table-column prop="separator" label="分隔符" />
+        <el-table-column prop="model_start" label="型号起始位置" />
+        <el-table-column prop="model_separator_start" label="型号分隔符起始位置" />
+        <el-table-column prop="model_length" label="型号长度" />
+        <el-table-column prop="production_date_start" label="生产日期起始位置" />
+        <el-table-column prop="production_date_separator_start" label="生产日期分隔符起始位置" />
+        <el-table-column prop="production_date_length" label="生产日期长度" />
+        <el-table-column prop="shelf_life_start" label="保质期起始位置" />
+        <el-table-column prop="shelf_life_separator_start" label="保质期分隔符起始位置" />
+        <el-table-column prop="shelf_life_length" label="保质期长度" />
+        <el-table-column prop="expiration_date_start" label="有效期起始位置" />
+        <el-table-column prop="expiration_date_separator_start" label="有效期分隔符起始位置" />
+        <el-table-column prop="expiration_date_length" label="有效期长度" />
         <el-table-column prop="modify_datetime" label="修改时间" />
         <el-table-column fixed="right" label="操作" min-width="140">
           <template #default="scope">
@@ -95,7 +107,7 @@ const modelData = ref({
     rewarm_num: null,
     rewarm_time: null,
     shelf_life: null,
-    JiaobanRule: '',
+    jiaoban_rule: '',
     stir_speed: null,
     stir_time: null,
     if_jiaoban: '',
@@ -103,14 +115,20 @@ const modelData = ref({
     out_chaoshi_auto_lc: null,
     out_chaoshi_auto_lc_times: null,
     if_back_after_jiaoban: null,
-    twice_chaoshi_jinzhi_in_binggui: null
-    // lfJiaoban: '',
-    // MinLcTime: null,
-    // OutChaoshiAutoLc: null,
-    // OutChaoshiAutoLcTimes: null,
-    // lfBackAfterJiaoban: '',
-    // TwiceChaoshijinzhilnBinggui: null,
-    // Twicelnku: ''
+    twice_chaoshi_jinzhi_in_binggui: null,
+    separator: null,
+    model_start: null,
+    model_separator_start: null,
+    model_length: null,
+    production_date_start: null,
+    production_date_separator_start: null,
+    production_date_length: null,
+    shelf_life_start: null,
+    shelf_life_separator_start: null,
+    shelf_life_length: null,
+    expiration_date_start: null,
+    expiration_date_separator_start: null,
+    expiration_date_length: null,
   } as modelType
 })
 
@@ -127,7 +145,7 @@ const reset = () => {
     rewarm_num: null,
     rewarm_time: null,
     shelf_life: null,
-    JiaobanRule: '',
+    jiaoban_rule: '',
     stir_speed: null,
     stir_time: null,
     if_jiaoban: '',
@@ -135,7 +153,20 @@ const reset = () => {
     out_chaoshi_auto_lc: null,
     out_chaoshi_auto_lc_times: null,
     if_back_after_jiaoban: null,
-    twice_chaoshi_jinzhi_in_binggui: null
+    twice_chaoshi_jinzhi_in_binggui: null,
+    separator: null,
+    model_start: null,
+    model_separator_start: null,
+    model_length: null,
+    production_date_start: null,
+    production_date_separator_start: null,
+    production_date_length: null,
+    shelf_life_start: null,
+    shelf_life_separator_start: null,
+    shelf_life_length: null,
+    expiration_date_start: null,
+    expiration_date_separator_start: null,
+    expiration_date_length: null,
   }
   barcodeInput.value = '' // 清空条码输入框
 }
@@ -162,16 +193,16 @@ const handleAdd = () => {
   modelApi.getModelByBarcode({ barcode: barcodeInput.value }).then((res: any) => {
       if (res.code === 0) {
         if (res.data !== 'None'){
-          modelData.value.formData.model = res.data
-        } 
-        modelData.value.visible = true
-        modelData.value.type = 'add'
-      }
-      else{
-        modelData.value.visible = true
-        modelData.value.type = 'add'
-      }
-      console.log("传过来的barcode:",modelData.value.formData.model)
+          modelData.value.formData.model = res.data['model']
+          modelData.value.formData.shelf_life = res.data['shelf_life']
+          modelData.value.visible = true
+          modelData.value.type = 'add'
+        }
+        else{
+          modelData.value.visible = true
+          modelData.value.type = 'add'
+        }
+      }  
     })
   
 

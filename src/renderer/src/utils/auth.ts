@@ -2,6 +2,7 @@
 const ACCESS_TOKEN_KEY = 'access_token'
 // 刷新 token 缓存的 key
 const REFRESH_TOKEN_KEY = 'refresh_token'
+const USER_ID_KEY = 'user_id'
 
 function getToken(): string {
   return localStorage.getItem(ACCESS_TOKEN_KEY) || ''
@@ -9,6 +10,13 @@ function getToken(): string {
 
 function setToken(token: string) {
   localStorage.setItem(ACCESS_TOKEN_KEY, token)
+}
+
+function getUserId(): string {
+  return localStorage.getItem(USER_ID_KEY) || ''
+}
+function setUserId(user_id: string) {
+  localStorage.setItem(USER_ID_KEY, user_id)
 }
 
 function getRefreshToken(): string {
@@ -24,4 +32,4 @@ function clearToken() {
   localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
 
-export { getToken, setToken, clearToken, getRefreshToken, setRefreshToken }
+export { getToken, setToken, getUserId, setUserId, clearToken, getRefreshToken, setRefreshToken }

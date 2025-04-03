@@ -8,6 +8,47 @@
     :close-on-click-modal="false"
   >
     <el-form ref="formRef" :model="form" label-width="20%" label-position="left">
+      <!-- 新增的表单项 -->
+      <el-form-item label="分隔符">
+        <el-input v-model="form.separator" placeholder="请输入分隔符" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="型号起始位置">
+        <el-input v-model="form.model_start" placeholder="请输入型号起始位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="型号起始分隔符位置">
+        <el-input v-model="form.model_separator_start" placeholder="请输入型号起始分隔符位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="型号长度">
+        <el-input v-model="form.model_length" placeholder="请输入型号长度" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="生产日期起始位置">
+        <el-input v-model="form.production_date_start" placeholder="请输入生产日期起始位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="生产日期起始分隔符位置">
+        <el-input v-model="form.production_date_separator_start" placeholder="请输入生产日期起始分隔符位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="生产日期长度">
+        <el-input v-model="form.production_date_length" placeholder="请输入生产日期长度" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="保质期起始位置">
+        <el-input v-model="form.shelf_life_start" placeholder="请输入保质期起始位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="保质期起始分隔符位置">
+        <el-input v-model="form.shelf_life_separator_start" placeholder="请输入保质期起始分隔符位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="保质期长度">
+        <el-input v-model="form.shelf_life_length" placeholder="请输入保质期长度" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="过期日期起始位置">
+        <el-input v-model="form.expiration_date_start" placeholder="请输入过期日期起始位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="过期日期起始分隔符位置">
+        <el-input v-model="form.expiration_date_separator_start" placeholder="请输入过期日期起始分隔符位置" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="过期日期长度">
+        <el-input v-model="form.expiration_date_length" placeholder="请输入过期日期长度" clearable></el-input>
+      </el-form-item>
+      <!-- 原有表单项 -->
       <el-form-item
         label="型号"
         prop="model"
@@ -255,7 +296,20 @@ const form = ref<modelType>({
   out_chaoshi_auto_lc_times: null,
   if_back_after_jiaoban: null,
   twice_chaoshi_jinzhi_in_binggui: null,
-  twice_in_ku: ''
+  twice_in_ku: '',
+  separator: '',
+  model_start: null,
+  model_separator_start: null,
+  model_length: null,
+  production_date_start: null,
+  production_date_separator_start: null,
+  production_date_length: null,
+  shelf_life_start: null,
+  shelf_life_separator_start: null,
+  shelf_life_length: null,
+  expiration_date_start: null,
+  expiration_date_separator_start: null,
+  expiration_date_length: null
 })
 
 watch(diaVisible, (newVal) => {

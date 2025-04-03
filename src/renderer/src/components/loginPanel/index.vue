@@ -77,8 +77,7 @@ import { computed, ref, watch,defineDirective, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserStore from '@renderer/store/modules/user'
 import { ipcRenderer } from 'electron'
-// import { clearToken } from '@renderer/utils/auth'
-import { clearToken } from '@renderer/utils/auth'
+import { setToken, clearToken,setUserId,getUserId } from '@renderer/utils/auth'
 import userApi from '@renderer/api/user/index'
 const ICInputRef = ref(null)
 const curLoadType = ref<'IC' | 'Account' | 'face'>('IC')
@@ -192,22 +191,16 @@ const cancelLogin = () => {
 }
 
 let inactivityTimer: null | NodeJS.Timeout = null
-// 新增变量
-const isLoggedIn = ref(!!localStorage.getItem('user_id'))
-const userId = ref(localStorage.getItem('user_id'))
 // 登录（主要处理人脸登录）
 const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
   if (type === 'face') {
     userApi.faceDetect().then((res: any) => {
       if (res.code === 0) {
-        const user_id = res.data.user_id; 
-        // 将 user_id 存储到 localStorage 中
-        localStorage.setItem('user_id', user_id); 
-        // 更新 userId 的值
-        userId.value = user_id; 
-        // 更新登录状态
-        isLoggedIn.value = true; 
-        emit('login', user_id)
+        const token = res.data.token
+        const user_id = res.data.user_id
+        setToken(token)
+        setUserId(user_id)
+        emit('login')
       } else {
         ElMessage.error(res.data.message)
       }
@@ -234,11 +227,11 @@ const confirmLogin = () => {
         if (res.data && res.code === 0) {
           // 登录成功，传递账号信息
           if (form.value.id !== '') {
-            emit('login', form.value.id)
+            localStorage.setItem('user_id', form.value.id)
           } else if(form.value.user_ic !== ''){
-            emit('login', form.value.user_ic)
+            localStorage.setItem('user_id', form.value.user_ic)
           }
-          
+          emit('login')
         } else {
           ElMessage.error(res.data || '登录失败')
         }

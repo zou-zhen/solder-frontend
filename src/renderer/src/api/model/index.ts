@@ -22,6 +22,19 @@ export interface modelType {
   if_back_after_jiaoban: number | null
   twice_chaoshi_jinzhi_in_binggui: number | null
   twice_in_ku?: string
+  separator: string | null;
+  model_start: number | null;
+  model_separator_start: number | null;
+  model_length: number | null;
+  production_date_start: number | null;
+  production_date_separator_start: number | null;
+  production_date_length: number | null;
+  shelf_life_start: number | null;
+  shelf_life_separator_start: number | null;
+  shelf_life_length: number | null;
+  expiration_date_start: number | null;
+  expiration_date_separator_start: number | null;
+  expiration_date_length: number | null;
 }
 
 const getModelList = () => {

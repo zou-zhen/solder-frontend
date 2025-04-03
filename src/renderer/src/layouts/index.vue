@@ -46,7 +46,7 @@
       <div style="display: flex; flex-direction: column; margin-top: 10px; width: 25%">
         <div class="tag-block" style="margin-right: 10px; height: 45%;display: flex; justify-content:flex-end">
           <!-- 新增登录/退出按钮 -->
-          <el-button class="el-button" @click="toggleLogin">{{ isLoggedIn ? '退出' : '登录' }}</el-button>
+          <el-button class="el-button" @click="toggleLogin">{{ isLogined ? '退出' : '登录' }}</el-button>
           <el-button :icon="Refresh" class="el-button" @click="debouncedReload">刷新</el-button>
           <el-button
             class="el-button"
@@ -122,7 +122,8 @@ import { ElMessage } from 'element-plus'
 import movementApi from '@renderer/api/movement'
 import { Refresh } from '@element-plus/icons-vue'
 import debounce from 'lodash/debounce'
-
+import useUserStore from '@renderer/store/modules/user'
+import { setToken,getToken, clearToken,setUserId,getUserId } from '@renderer/utils/auth'
 const statusStore = useStatusStore()
 const currentRoute = useRoute()
 const currentTime = ref('')
@@ -138,18 +139,18 @@ statusStore.getMode()
 const loginVisible = ref(false)
 const curFunc = ref('')
 // 新增变量
-const isLoggedIn = ref(!!localStorage.getItem('user_id'))
-const userId = ref(localStorage.getItem('user_id'))
+const userStore = useUserStore()
+const token = ref(getToken() )
+const isLogined = ref(false)
+const userId = ref('')
+if (token.value){
+    isLogined.value = true
+    userId.value = getUserId()
+}
 // 超时自动退出登录
 let logoutTimer: ReturnType<typeof setTimeout> | null = null; // 定义一个定时器变量
-// account：loginPanel处理（登录/确认登录时）emit过来的user_id
-const handleLogin = (account: string) => {
+const handleLogin = () => {
   loginVisible.value = false
-  // 假设登录成功后返回 user_id
-  const user_id = account 
-  localStorage.setItem('user_id', user_id)
-  userId.value = user_id
-  isLoggedIn.value = true
   // 超时自动退出登录
   // 清除之前的定时器（如果有的话）
   if (logoutTimer) {
@@ -158,7 +159,7 @@ const handleLogin = (account: string) => {
   // 设置新的定时器，1 分钟后自动退出登录
   logoutTimer = setTimeout(() => {
     logout();
-  }, 60000); // 10 分钟 = 600000 毫秒
+  }, 600000); // 10 分钟 = 600000 毫秒
 
   switch (curFunc.value) {
     case 'alert':
@@ -203,10 +204,7 @@ const onClick = (fnName: string) => {
     curFunc.value = fnName
     handleLogin()
   } else {
-    // const token = localStorage.getItem('access_token')
-    // if (token) {
-    const user_id = localStorage.getItem('user_id')
-    if (user_id) {
+    if (token) {
       curFunc.value = fnName
       handleLogin()
     } else {
@@ -223,10 +221,7 @@ const onClick = (fnName: string) => {
 }
 
 const logout = () => {
-  localStorage.removeItem('user_id')
-  localStorage.removeItem('access_token')
-  userId.value = null
-  isLoggedIn.value = false
+  userStore.logout()//调用 useUserStore 的 logout 函数
   router.push('/home')
   // 超时自动退出登录
   // 清除定时器
@@ -238,7 +233,7 @@ const logout = () => {
 
 // 新增函数
 const toggleLogin = () => {
-  if (isLoggedIn.value) {
+  if (isLogined.value) {
     logout()
   } else {
     loginVisible.value = true
