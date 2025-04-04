@@ -198,6 +198,9 @@ const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
       if (res.code === 0) {
         const token = res.data.token
         const user_id = res.data.user_id
+        // 设置userStore的token
+        useStore.token = token
+        // 保存token到本地存储
         setToken(token)
         setUserId(user_id)
         emit('login')
@@ -227,9 +230,9 @@ const confirmLogin = () => {
         if (res.data && res.code === 0) {
           // 登录成功，传递账号信息
           if (form.value.id !== '') {
-            localStorage.setItem('user_id', form.value.id)
+            setUserId(form.value.id)
           } else if(form.value.user_ic !== ''){
-            localStorage.setItem('user_id', form.value.user_ic)
+            setUserId(form.value.user_ic)
           }
           emit('login')
         } else {

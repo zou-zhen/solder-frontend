@@ -1,4 +1,4 @@
-import { setToken, clearToken } from '@renderer/utils/auth'
+import { setToken, clearToken ,clearUserId} from '@renderer/utils/auth'
 import { defineStore } from 'pinia'
 import user from '@renderer/api/auth/user'
 import { LoginData, LoginResult } from '@renderer/api/auth/types'
@@ -25,9 +25,8 @@ export const useUserStore = defineStore('user', {
       if (res) {
         const { data } = res
         console.log(res)
-
         setToken(data.token) // Save token to localstorage
-        this.token = data.accessToken
+        this.token = data.token
       }
 
       return res
@@ -44,8 +43,10 @@ export const useUserStore = defineStore('user', {
     },
     logout() {
       clearToken()
+      clearUserId()
       console.log('logout')
-    }
+    },
+    
   }
 })
 

@@ -46,7 +46,7 @@
       <div style="display: flex; flex-direction: column; margin-top: 10px; width: 25%">
         <div class="tag-block" style="margin-right: 10px; height: 45%;display: flex; justify-content:flex-end">
           <!-- 新增登录/退出按钮 -->
-          <el-button class="el-button" @click="toggleLogin">{{ isLogined ? '退出' : '登录' }}</el-button>
+          <el-button class="el-button" @click="toggleLogin">{{ isLogin ? '退出' : '登录' }}</el-button>
           <el-button :icon="Refresh" class="el-button" @click="debouncedReload">刷新</el-button>
           <el-button
             class="el-button"
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed ,watch} from 'vue'
 import router from '../router/index'
 import { useRoute } from 'vue-router'
 import useStatusStore from '@renderer/store/modules/status'
@@ -123,7 +123,8 @@ import movementApi from '@renderer/api/movement'
 import { Refresh } from '@element-plus/icons-vue'
 import debounce from 'lodash/debounce'
 import useUserStore from '@renderer/store/modules/user'
-import { setToken,getToken, clearToken,setUserId,getUserId } from '@renderer/utils/auth'
+import { setToken,getToken,getUserId } from '@renderer/utils/auth'
+// import { console } from 'inspector'
 const statusStore = useStatusStore()
 const currentRoute = useRoute()
 const currentTime = ref('')
@@ -140,27 +141,24 @@ const loginVisible = ref(false)
 const curFunc = ref('')
 // 新增变量
 const userStore = useUserStore()
-const token = ref(getToken() )
-const isLogined = ref(false)
-const userId = ref('')
-if (token.value){
-    isLogined.value = true
-    userId.value = getUserId()
+const token = getToken()
+const isLogin = ref(false)
+const userId = ref(getUserId())
+if (token){
+  isLogin.value = true
 }
-// 超时自动退出登录
-let logoutTimer: ReturnType<typeof setTimeout> | null = null; // 定义一个定时器变量
 const handleLogin = () => {
-  loginVisible.value = false
-  // 超时自动退出登录
-  // 清除之前的定时器（如果有的话）
-  if (logoutTimer) {
-    clearTimeout(logoutTimer);
-  }
-  // 设置新的定时器，1 分钟后自动退出登录
-  logoutTimer = setTimeout(() => {
-    logout();
-  }, 600000); // 10 分钟 = 600000 毫秒
+  console.log('handleLogin 函数被调用')
+  isLogin.value = true
+  userId.value = getUserId()
+  window.location.reload()
+  // 设置定时器到期时间,到时间自动退出登录
+  const expirationTime = Date.now() + 1000 * 30
+  localStorage.setItem('logoutTimer', expirationTime.toString())
+}
 
+const swtichPage = () => {
+  loginVisible.value = false
   switch (curFunc.value) {
     case 'alert':
       router.push('/alert')
@@ -202,38 +200,37 @@ const handleLogin = () => {
 const onClick = (fnName: string) => {
   if (fnName === 'alert') {
     curFunc.value = fnName
-    handleLogin()
+    swtichPage()
   } else {
     if (token) {
       curFunc.value = fnName
-      handleLogin()
+      swtichPage()
     } else {
       // 添加提示信息:请先去登录按钮登录，而不再是直接在这里弹出登录框
       loginVisible.value = false
       ElMessage({
-          message: '请先登录',
-          type: 'warning',
-          duration: 3000
-        })
+        message: '请先登录',
+        type: 'warning',
+        duration: 3000
+      })
       curFunc.value = fnName
     }
   }
 }
 
 const logout = () => {
-  userStore.logout()//调用 useUserStore 的 logout 函数
+  console.log('logout 函数被调用')
+  userStore.logout() //调用 useUserStore 的 logout 函数
   router.push('/home')
-  // 超时自动退出登录
-  // 清除定时器
-  if (logoutTimer) {
-    clearTimeout(logoutTimer);
-    logoutTimer = null;
-  }
+  // 手动退出登录后：刷新页面
+  window.location.reload()
+  // 自动退出后：清除 localStorage 中的定时器信息
+  localStorage.removeItem('logoutTimer')
 }
 
 // 新增函数
 const toggleLogin = () => {
-  if (isLogined.value) {
+  if (isLogin.value) {
     logout()
   } else {
     loginVisible.value = true
@@ -296,6 +293,19 @@ onMounted(() => {
   connectSSE('/stream/get_warn_states')
   updateTime()
   setInterval(updateTime, 1000)
+  // 检查 localStorage 中是否存在定时器信息
+  const expirationTime = localStorage.getItem('logoutTimer')
+  if (expirationTime) {
+    const remainingTime = parseInt(expirationTime) - Date.now()
+    if (remainingTime > 0) {
+      setTimeout(() => {
+        logout()
+      }, remainingTime)
+    } else {
+      // 定时器已过期，立即退出登录
+      logout()
+    }
+  }
 })
 
 onUnmounted(() => {
