@@ -3,3 +3,7 @@ dist
 out
 .DS_Store
 *.log*
+*.rar
+node_modules
+*.rar
+node_modules
