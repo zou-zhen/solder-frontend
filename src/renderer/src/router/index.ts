@@ -330,7 +330,7 @@ router.beforeEach((to, _from, next) => {
     const token = localStorage.getItem('access_token')
 
     if (!token) {
-      return next('/login')
+      return next('/home')
     } else {
       console.log('kkk')
 

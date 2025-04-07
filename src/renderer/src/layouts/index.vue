@@ -153,7 +153,7 @@ const handleLogin = () => {
   userId.value = getUserId()
   window.location.reload()
   // 设置定时器到期时间,到时间自动退出登录
-  const expirationTime = Date.now() + 1000 * 30
+  const expirationTime = Date.now() + 1000 * 3000
   localStorage.setItem('logoutTimer', expirationTime.toString())
 }
 
