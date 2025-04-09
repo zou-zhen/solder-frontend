@@ -68,7 +68,7 @@
           <el-tag type="success" class="el-tag">报警</el-tag>
           <el-tag type="info" class="el-tag">{{ statusStore.switchStatus === true ? '手动' : '自动' }}</el-tag>
           <el-tag type="warning" class="el-tag">未回零</el-tag>
-          <el-tag type="danger" class="el-tag">未在搅拌</el-tag>
+          <el-tag type="danger" class="el-tag">{{ statusStore.is_stiring === true ? '正在搅拌' : '未在搅拌' }}  </el-tag>
         </div>
       </div>
       
@@ -136,6 +136,7 @@ const filteredAlertKeys = computed(() => {
 })
 statusStore.getSwitchStatus()
 statusStore.getMode()
+statusStore.getIsStiring()
 
 const loginVisible = ref(false)
 const curFunc = ref('')

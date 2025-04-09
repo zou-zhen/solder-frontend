@@ -44,6 +44,10 @@ const heartbeat = () => {
   return http.post('/sport/heartbeat', null)
 }
 
+const getIsStiring = () => {
+  return http.get('/sport/get_is_stiring')
+}
+
 // const inputOpen = () => {
 //   return http.get('/sport/input_open')
 // }
@@ -63,7 +67,8 @@ export default {
   getSportStates2,
   tunedSpeed,
   getSpeed,
-  heartbeat
+  heartbeat,
+  getIsStiring
   // inputOpen,
   // outputOpen
 }

@@ -26,7 +26,8 @@ const onSetSport = (action: string, tag: number) => {
 export const useStatusStore = defineStore('status', {
   state: () => ({
     switchStatus: true,
-    mode: 1 as 0 | 1
+    mode: 1 as 0 | 1,
+    is_stiring: false
   }),
   getters: {
     modeName(state) {
@@ -108,6 +109,19 @@ export const useStatusStore = defineStore('status', {
             message: res.data,
             type: 'error',
             duration: 1000 // 显示时长，默认3000ms
+          })
+        }
+      })
+    },
+    async getIsStiring() {
+      await movementApi.getIsStiring().then((res: any) => {
+        if (res.code === 0) {
+          this.is_stiring = res.data
+        } else {
+          ElMessage({
+            message: res.data,
+            type: 'error',
+            duration: 3000 // 显示时长，默认3000ms
           })
         }
       })
