@@ -47,17 +47,17 @@
       </div>
     </div>
     <div style="padding: 20px">
-      <el-table v-loading="loading" :data="inventoryList" stripe max-height="800">
+      <el-table v-loading="loading" :data="inventoryList" stripe max-height="1000">
         <!-- <el-table-column prop="StationID" label="序号" /> -->
-        <el-table-column prop="SolderCode" label="锡膏码" />
-        <el-table-column prop="Model" label="型号" />
-        <el-table-column
+        <el-table-column prop="SolderCode" label="锡膏码" sortable/>
+        <el-table-column prop="Model" label="型号" sortable/>
+        <!-- <el-table-column
           prop="MesError"
           label="异常信息"
           :filters="[{ text: '只看异常', value: true }]"
           :filter-method="filterError"
-        />
-        <el-table-column prop="StationID" label="所在工位" />
+        /> -->
+        <el-table-column prop="StationID" label="所在工位" sortable/>
         <el-table-column prop="StaArea" label="所在区域" />
         <el-table-column
           prop="StorageUser"
@@ -70,19 +70,7 @@
             {{ scope.row.StorageUser }}
           </template>
         </el-table-column>
-        <el-table-column label="入柜时间" width="180">
-          <template #header>
-            <span style="cursor: pointer" @click="handleTimeSort('storageTime')">
-              入柜时间
-              <el-icon>
-                <component :is="timeSort.storageTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.StorageDateTime }}
-          </template>
-        </el-table-column>
+        <el-table-column prop="StorageDateTime" label="入柜时间" width="180" sortable/>
         <el-table-column
           prop="OrderUser"
           label="预约人"
@@ -94,59 +82,11 @@
             {{ scope.row.OrderUser }}
           </template>
         </el-table-column>
-        <el-table-column label="预约时间" width="180">
-          <template #header>
-            <span style="cursor: pointer" @click="handleTimeSort('outTime')">
-              预约时间
-              <el-icon>
-                <component :is="timeSort.outTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.OrderDateTime }}
-          </template>
-        </el-table-column>
-        <el-table-column label="回温开始时间" width="180">
-          <template #header>
-            <span style="cursor: pointer" @click="handleTimeSort('rewarmStartTime')">
-              回温开始时间
-              <el-icon>
-                <component :is="timeSort.rewarmStartTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.RewarmStartDateTime }}
-          </template>
-        </el-table-column>
-        <el-table-column label="回温结束时间" width="180">
-          <template #header>
-            <span style="cursor: pointer" @click="handleTimeSort('rewarmEndTime')">
-              回温结束时间
-              <el-icon>
-                <component :is="timeSort.rewarmEndTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.RewarmEndDateTime }}
-          </template>
-        </el-table-column>
-        <el-table-column label="搅拌开始时间" width="180">
-          <template #header>
-            <span style="cursor: pointer" @click="handleTimeSort('stirStartTime')">
-              搅拌开始时间
-              <el-icon>
-                <component :is="timeSort.stirStartTime === 'asc' ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.StirStartDateTime }}
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" min-width="120">
+        <el-table-column prop="OrderDateTime" label="预约时间" width="180" sortable/>
+        <el-table-column prop="RewarmStartDateTime" label="回温开始时间" width="180" sortable/>
+        <el-table-column prop="RewarmEndDateTime" label="回温结束时间" width="180" sortable/>
+        <el-table-column prop="StirStartDateTime" label="搅拌开始时间" width="180" sortable/>
+        <!-- <el-table-column fixed="right" label="操作" min-width="120">
           <template #default="scope">
             <el-button
               v-if="scope.row.StaArea === '冷藏区'"
@@ -156,7 +96,7 @@
               >取出</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
   </div>
@@ -202,6 +142,7 @@ const timeSort = ref({
   rewarmEndTime: 'desc',
   stirStartTime: 'desc'
 })
+const stationIDSort = ref("desc")
 
 // 自定义过滤方法
 const filterError = (value, row) => {
@@ -223,6 +164,11 @@ const filterOrderUser = (value: string, row) => {
 
 const handleTimeSort = (field: string) => {
   timeSort.value[field] = timeSort.value[field] === 'asc' ? 'desc' : 'asc'
+  getList()
+}
+
+const handleStationIDSort = () => {
+  stationIDSort.value = stationIDSort.value === 'asc' ? 'desc' : 'asc'
   getList()
 }
 

@@ -12,9 +12,9 @@
             <el-input v-model="solderQueryParams.user_id" size="large" clearable></el-input>
           </div>
           <div class="form-item">
-            <span class="label">类型：</span>
+            <span class="label">事件：</span>
             <el-select
-              v-model="solderQueryParams.record_type"
+              v-model="solderQueryParams.event"
               size="large"
               class="selector"
               clearable
@@ -42,7 +42,9 @@
             />
           </div>
           <div class="form-item">
-            <el-pagination
+            <el-config-provider :locale="zhCn">
+
+              <el-pagination
               v-model:current-page="solderQueryParams.page"
               v-model:page-size="solderQueryParams.page_size"
               :page-sizes="[10, 20, 50, 100]"
@@ -50,18 +52,8 @@
               :page-size-opts="[10, 20, 50, 100]"
               layout="total, sizes, prev, pager, next, jumper"
               @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-            >
-              <template #total>
-                共 {{ total }} 条
-              </template>
-              <template #sizes="{ item }">
-                {{ item.value }} 条/页
-              </template>
-              <template #jumper>
-                前往 <el-input v-model="solderQueryParams.page" /> 页
-              </template>
-            </el-pagination>
+              @current-change="handleCurrentChange"/>
+            </el-config-provider>
             <el-button type="primary" size="large" @click="handleSolderQuery">查询</el-button>
             <el-button type="primary" size="large" @click="handleSolderReset">重置</el-button>
           </div>
@@ -91,7 +83,7 @@
                 {{ scope.row.UserName }}
               </template>
             </el-table-column>
-            <el-table-column prop="Type" label="类型" width="120" />
+            <el-table-column prop="Event" label="事件" width="120" />
             <el-table-column label="时间" width="180">
               <template #header>
                 <span style="cursor: pointer" @click="handleTimeSort">
@@ -123,8 +115,8 @@
             />
           </div>
           <div class="form-item">
-            
-            <el-pagination
+            <el-config-provider :locale="zhCn">
+              <el-pagination
               v-model:current-page="temperQueryParams.page"
               v-model:page-size="temperQueryParams.page_size"
               :page-sizes="[10, 20, 50, 100]"
@@ -132,18 +124,8 @@
               :page-size-opts="[10, 20, 50, 100]"
               layout="total, sizes, prev, pager, next, jumper"
               @size-change="handleTemperSizeChange"
-              @current-change="handleTemperCurrentChange"
-            >
-              <template #total>
-                共 {{ temperTotal }} 条
-              </template>
-              <template #sizes="{ item }">
-                {{ item.value }} 条/页
-              </template>
-              <template #jumper>
-                前往 <el-input v-model="temperQueryParams.page" /> 页
-              </template>
-            </el-pagination>
+              @current-change="handleTemperCurrentChange"/>
+          </el-config-provider>
           
             <el-button type="primary" size="large" @click="handleTemperQuery">查询</el-button>
           </div>
@@ -170,6 +152,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import router from '../../router/index'
 import recordApi, { 
   TemperatureResponse, 
@@ -182,13 +166,57 @@ import * as echarts from 'echarts'
 
 const options = ref([
   {
-    label: '入柜',
-    value: '入柜'
+    label: "出冷藏区",
+    value: "出冷藏区"
   },
   {
-    label: '出柜',
-    value: '出柜'
-  }
+    label: "出回温区",
+    value: "出回温区"
+  },
+  {
+    label: "出待取区",
+    value: "出待取区"
+  },
+  {
+    label: "进冷藏区",
+    value: "进冷藏区"
+  },
+  {
+    label: "进回温区",
+    value: "进回温区"
+  },
+  {
+    label: "进待取区",
+    value: "进待取区"
+  },
+  {
+    label: "开始搅拌",
+    value: "开始搅拌"
+  },
+  {
+    label: "结束搅拌",
+    value: "结束搅拌"
+  },
+  {
+    label: "扫码失败",
+    value: "扫码失败"
+  },
+  {
+    label: "请求入库",
+    value: "请求入库"
+  },
+  {
+    label: "请求出库",
+    value: "请求出库"
+  },
+  {
+    label: "入库成功",
+    value: "入库成功"
+  },
+  {
+    label: "出库完成",
+    value: "出库完成"
+  },
 ])
 
 const userList = ref<User[]>([])
@@ -204,7 +232,7 @@ const solderInterval = ref([])
 const solderQueryParams = ref({
   solder_code: '',
   user_id: null,
-  record_type: '',
+  event: '',
   page: 1,
   page_size: 10,
   sort_order: 'desc'
@@ -233,7 +261,7 @@ const handleSolderReset = () => {
   solderQueryParams.value = {
     solder_code: '',
     user_id: null,
-    record_type: '',
+    event: '',
     page: 1,
     page_size: 10,
     sort_order: 'desc'
@@ -291,7 +319,7 @@ const getSolderList = () => {
       end_date: solderInterval.value?.[1],
       solder_code: solderQueryParams.value.solder_code,
       user_id: selectedUser.value || null,
-      record_type: solderQueryParams.value.record_type,
+      event: solderQueryParams.value.event,
       page: solderQueryParams.value.page,
       page_size: solderQueryParams.value.page_size,
       sort_order: sortOrder.value
