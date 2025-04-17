@@ -62,7 +62,7 @@
         </div>
         <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">{{ currentTime }}</span>
         <!-- 显示当前用户信息 -->
-        <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">当前用户：{{ userId || '无' }}</span>
+        <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">当前用户：{{ userId || '无' }} &nbsp; {{ userName || '无' }} </span>
         <div class="tag-block" style="margin-right: 10px;height:35%;display: flex; justify-content:flex-end">
           <el-tag type="primary" class="el-tag">{{ statusStore.modeName }}</el-tag>
           <el-tag type="success" class="el-tag">报警</el-tag>
@@ -123,7 +123,7 @@ import movementApi from '@renderer/api/movement'
 import { Refresh } from '@element-plus/icons-vue'
 import debounce from 'lodash/debounce'
 import useUserStore from '@renderer/store/modules/user'
-import { setToken,getToken,getUserId } from '@renderer/utils/auth'
+import { setToken,getToken,getUserId, getUserName } from '@renderer/utils/auth'
 // import { console } from 'inspector'
 const statusStore = useStatusStore()
 const currentRoute = useRoute()
@@ -145,6 +145,7 @@ const userStore = useUserStore()
 const token = getToken()
 const isLogin = ref(false)
 const userId = ref(getUserId())
+const userName = ref(getUserName())
 if (token){
   isLogin.value = true
 }

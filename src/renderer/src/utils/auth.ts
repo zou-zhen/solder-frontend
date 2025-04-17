@@ -3,6 +3,8 @@ const ACCESS_TOKEN_KEY = 'access_token'
 // 刷新 token 缓存的 key
 const REFRESH_TOKEN_KEY = 'refresh_token'
 const USER_ID_KEY = 'user_id'
+const USER_NAME_KEY = 'user_name'
+const USER_GRADE_KEY = 'user_grade'
 
 function getToken(): string {
   return localStorage.getItem(ACCESS_TOKEN_KEY) || ''
@@ -17,6 +19,18 @@ function getUserId(): string {
 }
 function setUserId(user_id: string) {
   localStorage.setItem(USER_ID_KEY, user_id)
+}
+function getUserName(): string {
+  return localStorage.getItem(USER_NAME_KEY) || ''
+}
+function setUserName(user_name: string) {
+  localStorage.setItem(USER_NAME_KEY, user_name)
+}
+function getUserGrade(): string {
+  return localStorage.getItem(USER_GRADE_KEY) || ''
+}
+function setUserGrade(user_grade: string) {
+  localStorage.setItem(USER_GRADE_KEY, user_grade)
 }
 
 function getRefreshToken(): string {
@@ -36,4 +50,10 @@ function clearUserId() {
   
 }
 
-export { getToken, setToken, getUserId, setUserId, clearToken,clearUserId, getRefreshToken, setRefreshToken }
+export { 
+  getToken, setToken, 
+  getUserId, setUserId, 
+  getUserName, setUserName,
+  getUserGrade, setUserGrade,
+  clearToken,clearUserId, 
+  getRefreshToken, setRefreshToken }

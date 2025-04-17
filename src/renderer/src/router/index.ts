@@ -1,8 +1,16 @@
+import { getToken, getUserGrade } from '@renderer/utils/auth';
+import { ElMessage } from 'element-plus';
 import { createRouter, createWebHashHistory } from 'vue-router'
+
+const Grade_ADMIN = 0;
+const Grade_MANAGER = 1;
+const Grade_COMMON_USER = 2;
+
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/home',
+    meta:{}
   },
   {
     path: '/login',
@@ -15,7 +23,8 @@ const routes = [
       {
         path: '/login',
         meta: {
-          title: '登录'
+          title: '登录',
+          role: Grade_COMMON_USER
         },
         component: () => import('@renderer/views/login/index.vue')
       }
@@ -32,51 +41,20 @@ const routes = [
       {
         path: '/home',
         meta: {
-          title: '主页'
+          title: '主页',
+          role: Grade_COMMON_USER
         },
         component: () => import('@renderer/views/home/index.vue')
       }
     ]
   },
-  {
-    path: '/functionPage',
-    name: '设置页',
-    meta: {
-      title: '设置页'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/functionPage',
-        meta: {
-          title: '设置页'
-        },
-        component: () => import('@renderer/views/functionPage/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/outbound',
-    name: '出库',
-    meta: {
-      title: '出库'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/outbound',
-        meta: {
-          title: '出库'
-        },
-        component: () => import('@renderer/views/outbound/index.vue')
-      }
-    ]
-  },
+  // 普通工人及以上均可访问的页面
   {
     path: '/reservation',
     name: '预约',
     meta: {
-      title: '预约'
+      title: '预约',
+      role: Grade_COMMON_USER
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -90,10 +68,47 @@ const routes = [
     ]
   },
   {
+    path: '/outbound',
+    name: '出库',
+    meta: {
+      title: '出库',
+      role: Grade_COMMON_USER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/outbound',
+        meta: {
+          title: '出库'
+        },
+        component: () => import('@renderer/views/outbound/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/recycle',
+    name: '回收',
+    meta: {
+      title: '回收',
+      role: Grade_COMMON_USER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/recycle',
+        meta: {
+          title: '回收'
+        },
+        component: () => import('@renderer/views/recycle/index.vue')
+      }
+    ]
+  },
+  {
     path: '/inventoryQuery',
     name: '查询',
     meta: {
-      title: '查询'
+      title: '查询',
+      role: Grade_COMMON_USER
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -107,44 +122,11 @@ const routes = [
     ]
   },
   {
-    path: '/modelManagement',
-    name: '型号管理',
-    meta: {
-      title: '型号管理'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/modelManagement',
-        meta: {
-          title: '型号管理'
-        },
-        component: () => import('@renderer/views/modelManagement/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/alert',
-    name: '报警记录',
-    meta: {
-      title: '报警记录'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/alert',
-        meta: {
-          title: '报警记录'
-        },
-        component: () => import('@renderer/views/alert/index.vue')
-      }
-    ]
-  },
-  {
     path: '/dataLog',
     name: '数据记录',
     meta: {
-      title: '数据记录'
+      title: '数据记录',
+      role: Grade_COMMON_USER
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -158,10 +140,103 @@ const routes = [
     ]
   },
   {
+    path: '/alert',
+    name: '报警记录',
+    meta: {
+      title: '报警记录',
+      role: Grade_COMMON_USER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/alert',
+        meta: {
+          title: '报警记录'
+        },
+        component: () => import('@renderer/views/alert/index.vue')
+      }
+    ]
+  },
+// 现场负责人及以上才可访问的页面
+  {
+    path: '/manual',
+    name: '示教',
+    meta: {
+      title: '示教',
+      role: Grade_MANAGER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/manual',
+        meta: {
+          title: '示教'
+        },
+        component: () => import('@renderer/views/manual/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/movement',
+    name: '运动系统',
+    meta: {
+      title: '运动系统',
+      role: Grade_MANAGER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/movement',
+        meta: {
+          title: '运动系统'
+        },
+        component: () => import('@renderer/views/movement/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/modelManagement',
+    name: '型号管理',
+    meta: {
+      title: '型号管理',
+      role: Grade_MANAGER
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/modelManagement',
+        meta: {
+          title: '型号管理'
+        },
+        component: () => import('@renderer/views/modelManagement/index.vue')
+      }
+    ]
+  },
+// 管理员才可访问的页面
+  {
+    path: '/functionPage',
+    name: '设置页',
+    meta: {
+      title: '设置页',
+      role: Grade_ADMIN
+    },
+    component: () => import('@renderer/layouts/index.vue'),
+    children: [
+      {
+        path: '/functionPage',
+        meta: {
+          title: '设置页'
+        },
+        component: () => import('@renderer/views/functionPage/index.vue')
+      }
+    ]
+  },
+  {
     path: '/user',
     name: '用户管理',
     meta: {
-      title: '用户管理'
+      title: '用户管理',
+      role: Grade_ADMIN
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -178,7 +253,8 @@ const routes = [
     path: '/system',
     name: '系统设置',
     meta: {
-      title: '系统设置'
+      title: '系统设置',
+      role: Grade_ADMIN
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -192,44 +268,11 @@ const routes = [
     ]
   },
   {
-    path: '/movement',
-    name: '运动系统',
-    meta: {
-      title: '运动系统'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/movement',
-        meta: {
-          title: '运动系统'
-        },
-        component: () => import('@renderer/views/movement/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/manual',
-    name: '示教',
-    meta: {
-      title: '示教'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/manual',
-        meta: {
-          title: '示教'
-        },
-        component: () => import('@renderer/views/manual/index.vue')
-      }
-    ]
-  },
-  {
     path: '/station',
     name: '工位设置',
     meta: {
-      title: '工位设置'
+      title: '工位设置',
+      role: Grade_ADMIN
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -246,7 +289,8 @@ const routes = [
     path: '/secondaryPage',
     name: '其它设置',
     meta: {
-      title: '其它设置'
+      title: '其它设置',
+      role: Grade_ADMIN
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -263,7 +307,8 @@ const routes = [
     path: '/setting',
     name: '设置',
     meta: {
-      title: '设置'
+      title: '设置',
+      role: Grade_ADMIN
     },
     component: () => import('@renderer/layouts/index.vue'),
     children: [
@@ -276,28 +321,13 @@ const routes = [
       }
     ]
   },
-  {
-    path: '/recycle',
-    name: '回收',
-    meta: {
-      title: '回收'
-    },
-    component: () => import('@renderer/layouts/index.vue'),
-    children: [
-      {
-        path: '/recycle',
-        meta: {
-          title: '回收'
-        },
-        component: () => import('@renderer/views/recycle/index.vue')
-      }
-    ]
-  },
+  
   {
     path: '/mock',
     name: '模拟',
     meta: {
-      title: '模拟'
+      title: '模拟',
+      role: Grade_ADMIN
     },
     // component: () => import('@renderer/views/mockDemo/index.vue'),
     component: () => import('@renderer/layouts/index.vue'),
@@ -312,6 +342,7 @@ const routes = [
     ]
   }
 ]
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes
@@ -322,22 +353,29 @@ router.beforeEach((to, _from, next) => {
   if (to.meta.title) {
     document.title = '智能锡膏柜管理系统 - ' + to.meta.title
   }
+ 
   // 放行登录页面
   if (to.path === '/home') {
     return next()
   } else {
-    // 获取token
-    const token = localStorage.getItem('access_token')
-
+    const token = getToken()
+    const userGrade = Number(getUserGrade())
+    const requiredRole = to.meta.role as number
     if (!token) {
       return next('/home')
     } else {
-      console.log('kkk')
-
-      next()
+      if (userGrade!=null && userGrade <= requiredRole) {
+        next()
+      } else {
+        ElMessage({
+          message: '您当前权限无法进入此页面',
+          type: 'warning',
+          duration: 3000
+        })
+        next('/home')
+      }
     }
   }
-  return next()
 })
 
 // 导出路由

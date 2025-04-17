@@ -1,4 +1,4 @@
-import { setToken, clearToken ,clearUserId} from '@renderer/utils/auth'
+import { setToken, clearToken ,clearUserId, setUserName, setUserGrade} from '@renderer/utils/auth'
 import { defineStore } from 'pinia'
 import user from '@renderer/api/auth/user'
 import { LoginData, LoginResult } from '@renderer/api/auth/types'
@@ -27,6 +27,8 @@ export const useUserStore = defineStore('user', {
         console.log(res)
         setToken(data.token) // Save token to localstorage
         this.token = data.token
+        setUserName(data.user_name)
+        setUserGrade(data.user_grade)
       }
 
       return res

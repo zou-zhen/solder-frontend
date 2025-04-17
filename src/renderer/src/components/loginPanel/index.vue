@@ -77,7 +77,7 @@ import { computed, ref, watch,defineDirective, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserStore from '@renderer/store/modules/user'
 import { ipcRenderer } from 'electron'
-import { setToken, clearToken,setUserId,getUserId } from '@renderer/utils/auth'
+import { setToken, clearToken,setUserId,getUserId, setUserGrade, setUserName } from '@renderer/utils/auth'
 import userApi from '@renderer/api/user/index'
 const ICInputRef = ref(null)
 const curLoadType = ref<'IC' | 'Account' | 'face'>('IC')
@@ -203,6 +203,8 @@ const handleLoadType = (type: 'IC' | 'Account' | 'face') => {
         // 保存token到本地存储
         setToken(token)
         setUserId(user_id)
+        setUserGrade(res.data.user_grade)
+        setUserName(res.data.user_name)
         emit('login')
       } else {
         ElMessage.error(res.data.message)
