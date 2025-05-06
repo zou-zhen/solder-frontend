@@ -1,4 +1,4 @@
-import { setToken, clearToken ,clearUserId, setUserName, setUserGrade} from '@renderer/utils/auth'
+import { setToken, clearToken ,clearUserInfo, setUserName, setUserGrade} from '@renderer/utils/auth'
 import { defineStore } from 'pinia'
 import user from '@renderer/api/auth/user'
 import { LoginData, LoginResult } from '@renderer/api/auth/types'
@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', {
     },
     logout() {
       clearToken()
-      clearUserId()
+      clearUserInfo()
       console.log('logout')
     },
     

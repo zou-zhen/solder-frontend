@@ -62,7 +62,7 @@
         </div>
         <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">{{ currentTime }}</span>
         <!-- 显示当前用户信息 -->
-        <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">当前用户：{{ userId || '无' }} &nbsp; {{ userName || '无' }} </span>
+        <span class="time-display" style="margin-right: 10px;display: flex; justify-content:flex-end">当前用户：{{ userId || '无' }} &nbsp; {{ userName || '' }} </span>
         <div class="tag-block" style="margin-right: 10px;height:35%;display: flex; justify-content:flex-end">
           <el-tag type="primary" class="el-tag">{{ statusStore.modeName }}</el-tag>
           <el-tag type="success" class="el-tag">报警</el-tag>

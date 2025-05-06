@@ -45,9 +45,9 @@ function clearToken() {
   localStorage.removeItem(ACCESS_TOKEN_KEY)
   localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
-function clearUserId() {
+function clearUserInfo() {
   localStorage.removeItem(USER_ID_KEY)
-  
+  localStorage.removeItem(USER_NAME_KEY)
 }
 
 export { 
@@ -55,5 +55,5 @@ export {
   getUserId, setUserId, 
   getUserName, setUserName,
   getUserGrade, setUserGrade,
-  clearToken,clearUserId, 
+  clearToken,clearUserInfo,
   getRefreshToken, setRefreshToken }
