@@ -32,7 +32,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('Y轴点动向前', 1)"
             @touchend="sendData('Y轴点动向前', 2)"
-            @touchcancel="sendData1('Y轴点动向前', 2)"
+            @touchcancel="sendData('Y轴点动向前', 2)"
             >Y+</el-button
           >
           <div class="control-button" type="primary"></div>
@@ -42,7 +42,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('手动xy45度动作向上', 1)"
             @touchend="sendData('手动xy45度动作向上', 2)"
-            @touchcancel="sendData1('手动xy45度动作向上', 2)"
+            @touchcancel="sendData('手动xy45度动作向上', 2)"
             >XY+</el-button
           >
           <el-button
@@ -51,21 +51,25 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('Z轴点动向上', 1)"
             @touchend="sendData('Z轴点动向上', 2)"
-            @touchcancel="sendData1('Z轴点动向上', 2)"
+            @touchcancel="sendData('Z轴点动向上', 2)"
             >Z-</el-button
           >
           <el-button
             class="control-button"
             type="primary"
             :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R轴点动正转', 1)"
-            @touchend="sendData('R轴点动正转', 2)"
-            @touchcancel="sendData1('R轴点动正转', 2)"
+            @touchstart="sendData('R1轴点动正转', 1)"
+            @touchend="sendData('R1轴点动正转', 2)"
+            @touchcancel="sendData('R1轴点动正转', 2)"
             >R1+</el-button
           >
           <el-button
             class="control-button"
             type="primary"
+            :disabled="!statusStore.switchStatus"
+            @touchstart="sendData('R2轴点动正转', 1)"
+            @touchend="sendData('R2轴点动正转', 2)"
+            @touchcancel="sendData('R2轴点动正转', 2)"
             >R2+</el-button
           >
           <el-button
@@ -74,7 +78,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('X轴点动向左', 1)"
             @touchend="sendData('X轴点动向左', 2)"
-            @touchcancel="sendData1('X轴点动向左', 2)"
+            @touchcancel="sendData('X轴点动向左', 2)"
             >X+</el-button
           >
           <el-button
@@ -83,7 +87,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('Y轴点动向后', 1)"
             @touchend="sendData('Y轴点动向后', 2)"
-            @touchcancel="sendData1('Y轴点动向后', 2)"
+            @touchcancel="sendData('Y轴点动向后', 2)"
             >Y-</el-button
           >
 
@@ -93,7 +97,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('X轴点动向右', 1)"
             @touchend="sendData('X轴点动向右', 2)"
-            @touchcancel="sendData1('X轴点动向右', 2)"
+            @touchcancel="sendData('X轴点动向右', 2)"
             >X-</el-button
           >
           <el-button
@@ -102,7 +106,7 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('手动xy45度动作向下', 1)"
             @touchend="sendData('手动xy45度动作向下', 2)"
-            @touchcancel="sendData1('手动xy45度动作向下', 2)"
+            @touchcancel="sendData('手动xy45度动作向下', 2)"
             >XY-</el-button
           >
           <el-button
@@ -111,21 +115,25 @@
             :disabled="!statusStore.switchStatus"
             @touchstart="sendData('Z轴点动向下', 1)"
             @touchend="sendData('Z轴点动向下', 2)"
-            @touchcancel="sendData1('Z轴点动向下', 2)"
+            @touchcancel="sendData('Z轴点动向下', 2)"
             >Z+</el-button
           >
           <el-button
             class="control-button"
             type="primary"
             :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R轴点动反转', 1)"
-            @touchend="sendData('R轴点动反转', 2)"
-            @touchcancel="sendData1('R轴点动反转', 2)"
+            @touchstart="sendData('R1轴点动反转', 1)"
+            @touchend="sendData('R1轴点动反转', 2)"
+            @touchcancel="sendData('R1轴点动反转', 2)"
             >R1-</el-button
           >
           <el-button
             class="control-button"
             type="primary"
+            :disabled="!statusStore.switchStatus"
+            @touchstart="sendData('R2轴点动反转', 1)"
+            @touchend="sendData('R2轴点动反转', 2)"
+            @touchcancel="sendData('R2轴点动反转', 2)"
             >R2-</el-button
           >
         </div>
@@ -685,10 +693,6 @@ const sendData = (action: string, tag: number) => {
   //     duration: 1000 // 显示时长，默认3000ms
   //   })
   // }
-}
-
-const sendData1 = (action: string, tag: number) => {
-  handleJob(action, tag)
 }
 
 onMounted(() => {
