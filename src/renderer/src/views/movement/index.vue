@@ -178,11 +178,15 @@
               }"><b>入柜区</b></div>
               <div class="label margin-inside-card">
                 <span>库位水平间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.入柜区.水平距离"
+                @blur="onSetRegionProp('入柜区', '水平距离')"
+                ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.入柜区.竖直距离"
+                @blur="onSetRegionProp('入柜区', '竖直距离')"
+                ></el-input>
               </div>
               <div class="margin-inside-card">
                 <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
@@ -196,11 +200,15 @@
               }"><b>冷藏区</b></div>
               <div class="label margin-inside-card">
                 <span>库位水平间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.水平距离"
+                @blur="onSetRegionProp('冷藏区', '水平距离')"
+                ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.竖直距离"
+                @blur="onSetRegionProp('冷藏区', '竖直距离')"
+                ></el-input>
               </div>
               <div class="margin-inside-card">
                 <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
@@ -214,11 +222,15 @@
               }"><b>回温区</b></div>
               <div class="label margin-inside-card">
                 <span>库位水平间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.回温区.水平距离"
+                @blur="onSetRegionProp('回温区', '水平距离')"
+                ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.回温区.竖直距离"
+                @blur="onSetRegionProp('回温区', '竖直距离')"
+                ></el-input>
               </div>
               <div class="margin-inside-card">
                 <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
@@ -232,11 +244,15 @@
               }"><b>待取区</b></div>
               <div class="label margin-inside-card">
                 <span>库位水平间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.待取区.水平距离"
+                @blur="onSetRegionProp('待取区', '水平距离')"
+                ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
-                <el-input class="inputor" size="large"></el-input>
+                <el-input class="inputor" size="large" v-model="allRegionProps.待取区.竖直距离"
+                @blur="onSetRegionProp('待取区', '竖直距离')"
+                ></el-input>
               </div>
               <div class="margin-inside-card">
                 <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
@@ -247,11 +263,15 @@
         <div class="form-item">
           <div class="label margin-inside-card">
             <span>冷藏区1起始库位角度：</span>
-            <el-input class="inputor" size="large"></el-input>
+            <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.区1角度"
+            @blur="onSetRegionProp('冷藏区', '区1角度')"
+            ></el-input>
           </div>
           <div class="label margin-inside-card">
             <span>冷藏区2起始库位角度：</span>
-            <el-input class="inputor" size="large"></el-input>
+            <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.区2角度"
+            @blur="onSetRegionProp('冷藏区', '区2角度')"
+            ></el-input>
           </div>
           <div class="label margin-inside-card">
             <span>锡膏柜型号：</span>
@@ -268,7 +288,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import panel from './components/panel.vue'
 import movementApi from '@renderer/api/movement/index'
 import { ElMessage } from 'element-plus'
@@ -383,6 +403,68 @@ const onSetSport = (action: string, tag: number, index?: number, groupId?: strin
   })
 }
 
+const allRegionProps = ref({
+  入柜区: {
+    水平距离: "1",
+    竖直距离: "2",
+  },
+  冷藏区: {
+    水平距离: "3",
+    竖直距离: "4",
+    区1角度: "9",
+    区2角度: "10",
+  },
+  回温区: {
+    水平距离: "5",
+    竖直距离: "6",
+  },
+  待取区: {
+    水平距离: "7",
+    竖直距离: "8",
+  },
+})
+
+const getAllRegionProps = () => {
+  movementApi.getRegionProp().then((res: any) => {
+    if (res.code === 0) {
+      allRegionProps.value = res.data
+    } else {
+      ElMessage({
+        message: res.data,
+        type: "error",
+        duration: 3000,
+      })
+    }
+  })
+}
+
+const onSetRegionProp = (region: string, prop: string) => {
+  if (!statusStore.switchStatus) {
+    return
+  }
+  movementApi.setRegionProp(
+    {
+      "region": region,
+      "prop": prop,
+      "value": Number(allRegionProps.value[region][prop])
+    }
+  ).then((res: any) => {
+    if (res.code === 0) {
+      ElMessage({
+        message: "操作成功！",
+        type: "success",
+        duration: 3000,
+      })
+    } else {
+      ElMessage({
+        message: res.data,
+        type: "error",
+        duration: 3000,
+      })
+    }
+  })
+}
+
 const allSpeed = ref({
   X轴满载速度: 0,
   Y轴满载速度: 0,
@@ -423,10 +505,13 @@ const handleUpdateSpeed = (type: string) => {
   })
 }
 
-getList()
-getSpeedList()
-getButtonGroupStatueList()
-statusStore.getSwitchStatus()
+onMounted(() => {
+  getList()
+  getSpeedList()
+  getButtonGroupStatueList()
+  getAllRegionProps()
+  statusStore.getSwitchStatus()
+})
 
 const value = ref('')
 

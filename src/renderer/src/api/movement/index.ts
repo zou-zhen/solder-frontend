@@ -48,6 +48,14 @@ const getIsStiring = () => {
   return http.get('/sport/get_is_stiring')
 }
 
+const getRegionProp = () => {
+  return http.get('/sport/region_prop')
+}
+
+const setRegionProp = (data) => {
+  return http.post('/sport/region_prop', data)
+}
+
 // const inputOpen = () => {
 //   return http.get('/sport/input_open')
 // }
@@ -68,7 +76,9 @@ export default {
   tunedSpeed,
   getSpeed,
   heartbeat,
-  getIsStiring
+  getIsStiring,
   // inputOpen,
   // outputOpen
+  getRegionProp,
+  setRegionProp,
 }
