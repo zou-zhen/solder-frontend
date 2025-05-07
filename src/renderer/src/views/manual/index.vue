@@ -61,7 +61,12 @@
             @touchstart="sendData('R轴点动正转', 1)"
             @touchend="sendData('R轴点动正转', 2)"
             @touchcancel="sendData1('R轴点动正转', 2)"
-            >R+</el-button
+            >R1+</el-button
+          >
+          <el-button
+            class="control-button"
+            type="primary"
+            >R2+</el-button
           >
           <el-button
             class="control-button"
@@ -116,7 +121,12 @@
             @touchstart="sendData('R轴点动反转', 1)"
             @touchend="sendData('R轴点动反转', 2)"
             @touchcancel="sendData1('R轴点动反转', 2)"
-            >R-</el-button
+            >R1-</el-button
+          >
+          <el-button
+            class="control-button"
+            type="primary"
+            >R2-</el-button
           >
         </div>
         <div class="box3">
@@ -297,8 +307,11 @@
               <span>{{ paramsLocation.z_location.toFixed(2) }}</span>
             </div>
             <div class="box-content">
-              <span>R(°/s):</span>
+              <span>R1(°/s):</span>
               <span>{{ paramsLocation.r_location.toFixed(2) }}</span>
+            </div>
+            <div class="box-content">
+              <span>R2(°/s):</span>
             </div>
           </div>
         </div>
@@ -320,6 +333,9 @@
             <div class="box-content">
               <span>J4(°/s):</span>
               <span>{{ paramsSpeed.r_speed.toFixed(2) }}</span>
+            </div>
+            <div class="box-content">
+              <span>J5(°/s):</span>
             </div>
           </div>
         </div>
@@ -409,16 +425,20 @@ const commandsV2 = ref<{
     { action: '模组夹爪气缸动作', status: true },
     { action: '模组180度旋转气缸动作', status: true },
     { action: '模组45度旋转气缸动作', status: true },
-    { action: '冰箱门推拉动作', status: true },
-    { action: '冰箱门滑台动作', status: true },
+    { action: '冰箱门1推拉动作', status: true },
+    { action: '冰箱门1滑台动作', status: true },
+    { action: '冰箱门2推拉动作', status: true },
+    { action: '冰箱门2滑台动作', status: true },
     { action: '出库滑台动作', status: true }
   ],
   group3: [
     { action: '模组夹爪气缸复位', status: true },
     { action: '模组180度旋转气缸复位', status: true },
     { action: '模组45度旋转气缸复位', status: true },
-    { action: '冰箱门推拉复位', status: true },
-    { action: '冰箱门滑台复位', status: true },
+    { action: '冰箱门1推拉复位', status: true },
+    { action: '冰箱门1滑台复位', status: true },
+    { action: '冰箱门2推拉复位', status: true },
+    { action: '冰箱门2滑台复位', status: true },
     { action: '出库滑台复位', status: true }
   ]
 })
@@ -736,7 +756,7 @@ onUnmounted(() => {
       height: 36%;
       border: 1px solid grey;
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       grid-template-rows: 2fr 2fr;
       gap: 5px;
       padding: 10px;

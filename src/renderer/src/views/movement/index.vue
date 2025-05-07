@@ -1,6 +1,6 @@
 <template>
   <div class="outbound-panel">
-    <el-collapse v-model="activeName" style="margin-left: 20px" accordion>
+    <el-collapse v-model="activeName" style="margin-left: 20px;">
       <el-collapse-item title="轴设置" name="1">
         <div class="form-item">
           <span class="label">X轴满载速度：</span>
@@ -34,6 +34,7 @@
         </div>
         <div class="form-item">
           <span class="label">XYZR自动速度百分比</span>
+          <span></span>
           <el-slider
             v-model="allSpeed.XYZR自动速度百分比"
             show-input
@@ -43,8 +44,8 @@
           />
         </div>
       </el-collapse-item>
-      <el-collapse-item title="轴操作" name="2">
-        <div style="height: 500px; overflow: auto">
+      <el-collapse-item title="模组点位一键写入" name="2">
+        <!-- <div style="height: 500px; overflow: auto">
           <div style="display: flex; flex-wrap: wrap; gap: 5px; width: 100%; margin-bottom: 5px">
             <el-tag
               v-for="item in statesList"
@@ -167,7 +168,97 @@
           <div style="display: flex; gap: 5px">
             <panel></panel>
           </div>
+        </div> -->
+        <div class="form-item">
+          <el-space size="large">
+            <el-card style="max-width: 320px">
+              <div :style="{
+                fontSize: '24px',
+                margin: '0px 10px 10px 0px'
+              }"><b>入柜区</b></div>
+              <div class="label margin-inside-card">
+                <span>库位水平间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="label margin-inside-card">
+                <span>库位竖直间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="margin-inside-card">
+                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+              </div>
+            </el-card>
+
+            <el-card style="max-width: 320px">
+              <div :style="{
+                fontSize: '24px',
+                margin: '0px 10px 10px 0px'
+              }"><b>冷藏区</b></div>
+              <div class="label margin-inside-card">
+                <span>库位水平间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="label margin-inside-card">
+                <span>库位竖直间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="margin-inside-card">
+                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+              </div>
+            </el-card>
+
+            <el-card style="max-width: 320px">
+              <div :style="{
+                fontSize: '24px',
+                margin: '0px 10px 10px 0px'
+              }"><b>回温区</b></div>
+              <div class="label margin-inside-card">
+                <span>库位水平间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="label margin-inside-card">
+                <span>库位竖直间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="margin-inside-card">
+                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+              </div>
+            </el-card>
+
+            <el-card style="max-width: 320px">
+              <div :style="{
+                fontSize: '24px',
+                margin: '0px 10px 10px 0px'
+              }"><b>待取区</b></div>
+              <div class="label margin-inside-card">
+                <span>库位水平间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="label margin-inside-card">
+                <span>库位竖直间隔距离 </span>
+                <el-input class="inputor" size="large"></el-input>
+              </div>
+              <div class="margin-inside-card">
+                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+              </div>
+            </el-card>
+          </el-space>
         </div>
+        <div class="form-item">
+          <div class="label margin-inside-card">
+            <span>冷藏区1起始库位角度：</span>
+            <el-input class="inputor" size="large"></el-input>
+          </div>
+          <div class="label margin-inside-card">
+            <span>冷藏区2起始库位角度：</span>
+            <el-input class="inputor" size="large"></el-input>
+          </div>
+          <div class="label margin-inside-card">
+            <span>锡膏柜型号：</span>
+            <el-input class="inputor" size="large"></el-input>
+          </div>
+        </div>
+
       </el-collapse-item>
     </el-collapse>
     <div class="store-out-panel"></div>
@@ -339,7 +430,7 @@ statusStore.getSwitchStatus()
 
 const value = ref('')
 
-const activeName = ref('1')
+const activeName = ref(['1', '2'])
 </script>
 
 <style scoped lang="scss">
@@ -401,12 +492,26 @@ const activeName = ref('1')
 
   .inputor {
     width: 240px;
+    margin: 8px;
   }
 }
 
 .label {
-  font-size: 16px;
+  font-size: 20px;
   min-width: 100px; /* 确保宽度一致，便于对齐 */
   // text-align: right;
+}
+
+.button {
+  font-size: 20px;
+  // background-color: #F39C12; 浅黄色
+  color: white;
+  // border-color: #F39C12;
+  height: 100%;
+  margin: 4px;
+}
+
+.margin-inside-card {
+  margin: 20px 5px 0px 0px;
 }
 </style>
