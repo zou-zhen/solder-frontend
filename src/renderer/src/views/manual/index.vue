@@ -262,11 +262,12 @@
             :key="item"
             type="primary"
             size="large"
+            :color="item.color"
             :disabled="!statusStore.switchStatus"
             :style="{
-              backgroundColor: '#4A6FB1', // 浅蓝色
+              // backgroundColor: item.color,
               color: 'white',
-              borderColor: '#4A6FB1'
+              // borderColor: item.color,
             }"
             @touchstart="onSetSport(item.action, 1, index, 'group2')"
             @touchend="onSetSport(item.action, 2, index, 'group2')"
@@ -280,11 +281,12 @@
             :key="item"
             type="primary"
             size="large"
+            :color="item.color"
             :disabled="!statusStore.switchStatus"
             :style="{
-              backgroundColor: '#F39C12', // 浅黄色
+              // backgroundColor: item.color,
               color: 'white',
-              borderColor: '#F39C12'
+              // borderColor: item.color,
             }"
             @touchstart="onSetSport(item.action, 1, index, 'group3')"
             @touchend="onSetSport(item.action, 2, index, 'group3')"
@@ -398,60 +400,61 @@ const loading = ref(true)
 type CommandStatus = {
   action: string
   status: boolean
+  color: string
 }
 
-const commands = ref<{
-  group3: CommandStatus[]
-  group4: CommandStatus[]
-  group2: CommandStatus[]
-  group1: CommandStatus[]
-}>({
-  group3: [
-    { action: '冰箱门推拉动作', status: true },
-    { action: '冰箱门推拉复位', status: true },
-    { action: '冰箱门滑台动作', status: true },
-    { action: '冰箱门滑台复位', status: true }
-  ],
-  group4: [
-    { action: '模组夹爪气缸动作', status: true },
-    { action: '模组夹爪气缸复位', status: true },
-    { action: '模组180度旋转气缸动作', status: true },
-    { action: '模组180度旋转气缸复位', status: true },
-    { action: '模组45度旋转气缸动作', status: true },
-    { action: '模组45度旋转气缸复位', status: true }
-  ],
-  group2: [
-    { action: '出库滑台动作', status: true },
-    { action: '出库滑台复位', status: true }
-  ],
-  group1: [{ action: '回原位按钮', status: true }]
-})
+// const commands = ref<{
+//   group3: CommandStatus[]
+//   group4: CommandStatus[]
+//   group2: CommandStatus[]
+//   group1: CommandStatus[]
+// }>({
+//   group3: [
+//     { action: '冰箱门推拉动作', status: true },
+//     { action: '冰箱门推拉复位', status: true },
+//     { action: '冰箱门滑台动作', status: true },
+//     { action: '冰箱门滑台复位', status: true }
+//   ],
+//   group4: [
+//     { action: '模组夹爪气缸动作', status: true },
+//     { action: '模组夹爪气缸复位', status: true },
+//     { action: '模组180度旋转气缸动作', status: true },
+//     { action: '模组180度旋转气缸复位', status: true },
+//     { action: '模组45度旋转气缸动作', status: true },
+//     { action: '模组45度旋转气缸复位', status: true }
+//   ],
+//   group2: [
+//     { action: '出库滑台动作', status: true },
+//     { action: '出库滑台复位', status: true }
+//   ],
+//   group1: [{ action: '回原位按钮', status: true }]
+// })
 
 const commandsV2 = ref<{
   group1: CommandStatus[]
   group2: CommandStatus[]
   group3: CommandStatus[]
 }>({
-  group1: [{ action: '回原位按钮', status: true }],
+  group1: [{ action: '回原位按钮', status: true, color: '' }],
   group2: [
-    { action: '模组夹爪气缸动作', status: true },
-    { action: '模组180度旋转气缸动作', status: true },
-    { action: '模组45度旋转气缸动作', status: true },
-    { action: '冰箱门1推拉动作', status: true },
-    { action: '冰箱门1滑台动作', status: true },
-    { action: '冰箱门2推拉动作', status: true },
-    { action: '冰箱门2滑台动作', status: true },
-    { action: '出库滑台动作', status: true }
+    { action: '模组夹爪气缸动作', status: true, color: '#4A6FB1' },
+    { action: '模组180度旋转气缸动作', status: true, color: '#F39C12' },
+    { action: '模组45度旋转气缸动作', status: true, color: '#4A6FB1' },
+    { action: '冰箱门1推拉动作', status: true, color: '#F39C12' },
+    { action: '冰箱门1滑台动作', status: true, color: '#F39C12' },
+    { action: '冰箱门2推拉动作', status: true, color: '#4A6FB1' },
+    { action: '冰箱门2滑台动作', status: true, color: '#4A6FB1' },
+    { action: '出库滑台动作', status: true, color: '#F39C12' }
   ],
   group3: [
-    { action: '模组夹爪气缸复位', status: true },
-    { action: '模组180度旋转气缸复位', status: true },
-    { action: '模组45度旋转气缸复位', status: true },
-    { action: '冰箱门1推拉复位', status: true },
-    { action: '冰箱门1滑台复位', status: true },
-    { action: '冰箱门2推拉复位', status: true },
-    { action: '冰箱门2滑台复位', status: true },
-    { action: '出库滑台复位', status: true }
+    { action: '模组夹爪气缸复位', status: true, color: '#4A6FB1' },
+    { action: '模组180度旋转气缸复位', status: true, color: '#F39C12' },
+    { action: '模组45度旋转气缸复位', status: true, color: '#4A6FB1' },
+    { action: '冰箱门1推拉复位', status: true, color: '#F39C12' },
+    { action: '冰箱门1滑台复位', status: true, color: '#F39C12' },
+    { action: '冰箱门2推拉复位', status: true, color: '#4A6FB1' },
+    { action: '冰箱门2滑台复位', status: true, color: '#4A6FB1' },
+    { action: '出库滑台复位', status: true, color: '#F39C12' }
   ]
 })
 
@@ -483,14 +486,14 @@ const getList = () => {
 
 const updateStatus = (data) => {
   // 遍历所有 group
-  Object.keys(commands.value).forEach((groupKey) => {
-    commands.value[groupKey].forEach((item) => {
-      // 根据 data 中的值更新状态
-      if (data[item.action] !== undefined) {
-        item.status = data[item.action]
-      }
-    })
-  })
+  // Object.keys(commands.value).forEach((groupKey) => {
+  //   commands.value[groupKey].forEach((item) => {
+  //     // 根据 data 中的值更新状态
+  //     if (data[item.action] !== undefined) {
+  //       item.status = data[item.action]
+  //     }
+  //   })
+  // })
   Object.keys(commandsV2.value).forEach((groupKey) => {
     commandsV2.value[groupKey].forEach((item) => {
       // 根据 data 中的值更新状态
@@ -810,7 +813,7 @@ onUnmounted(() => {
     .button-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 35px;
+      gap: 25px;
       width: 100%;
       margin-bottom: 10px;
     }
