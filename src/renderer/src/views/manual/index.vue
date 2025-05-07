@@ -316,10 +316,11 @@
             </div>
             <div class="box-content">
               <span>R1(°/s):</span>
-              <span>{{ paramsLocation.r_location.toFixed(2) }}</span>
+              <span>{{ paramsLocation.r1_location.toFixed(2) }}</span>
             </div>
             <div class="box-content">
               <span>R2(°/s):</span>
+              <span>{{ paramsLocation.r2_location.toFixed(2) }}</span>
             </div>
           </div>
         </div>
@@ -340,10 +341,11 @@
             </div>
             <div class="box-content">
               <span>J4(°/s):</span>
-              <span>{{ paramsSpeed.r_speed.toFixed(2) }}</span>
+              <span>{{ paramsSpeed.r1_speed.toFixed(2) }}</span>
             </div>
             <div class="box-content">
               <span>J5(°/s):</span>
+              <span>{{ paramsSpeed.r2_speed.toFixed(2) }}</span>
             </div>
           </div>
         </div>
@@ -381,13 +383,15 @@ const paramsLocation = ref({
   x_location: -49.694671630859375,
   y_location: 0.0,
   z_location: 77.73606872558594,
-  r_location: 16.4020938873291
+  r1_location: 16.4020938873291,
+  r2_location: 0.0,
 })
 const paramsSpeed = ref({
   x_speed: 0.0,
   y_speed: -0.019073486328125,
   z_speed: 0.0,
-  r_speed: 0.0
+  r1_speed: 0.0,
+  r2_speed: 0.0,
 })
 
 const loading = ref(true)
