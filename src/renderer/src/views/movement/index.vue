@@ -195,7 +195,10 @@
                 ></el-input>
               </div>
               <div class="margin-inside-card">
-                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+                <el-button class="button" type="warning" size="large"
+                @touchstart="onSetSport('入柜区库位坐标一键写入', 1)"
+                @touchend="onSetSport('入柜区库位坐标一键写入', 2)"
+                >库位坐标一键写入</el-button>
               </div>
             </el-card>
 
@@ -219,7 +222,10 @@
                 ></el-input>
               </div>
               <div class="margin-inside-card">
-                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+                <el-button class="button" type="warning" size="large"
+                @touchstart="onSetSport('冷藏区库位坐标一键写入', 1)"
+                @touchend="onSetSport('冷藏区库位坐标一键写入', 2)"
+                >库位坐标一键写入</el-button>
               </div>
             </el-card>
 
@@ -243,7 +249,10 @@
                 ></el-input>
               </div>
               <div class="margin-inside-card">
-                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+                <el-button class="button" type="warning" size="large"
+                @touchstart="onSetSport('回温区库位坐标一键写入', 1)"
+                @touchend="onSetSport('回温区库位坐标一键写入', 2)"
+                >库位坐标一键写入</el-button>
               </div>
             </el-card>
 
@@ -267,7 +276,10 @@
                 ></el-input>
               </div>
               <div class="margin-inside-card">
-                <el-button class="button" type="warning" size="large">库位坐标一键写入</el-button>
+                <el-button class="button" type="warning" size="large"
+                @touchstart="onSetSport('待取区库位坐标一键写入', 1)"
+                @touchend="onSetSport('待取区库位坐标一键写入', 2)"
+                >库位坐标一键写入</el-button>
               </div>
             </el-card>
           </el-space>
