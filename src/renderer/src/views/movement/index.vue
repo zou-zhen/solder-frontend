@@ -289,7 +289,8 @@
           </div>
           <div class="label margin-inside-card">
             <span>锡膏柜型号：</span>
-            <el-input class="inputor" size="large"
+            <el-input class="inputor" size="large" v-model="deviceModel"
+            @blur="onSetDeviceModel()"
             @keypress="input_filter"
             ></el-input>
           </div>
@@ -307,6 +308,7 @@
 import { onMounted, ref, computed } from 'vue'
 import panel from './components/panel.vue'
 import movementApi from '@renderer/api/movement/index'
+import systemApi from '@renderer/api/system/index'
 import { ElMessage } from 'element-plus'
 import useStatusStore from '@renderer/store/modules/status'
 
@@ -523,11 +525,46 @@ const handleUpdateSpeed = (type: string) => {
   })
 }
 
+const deviceModel = ref(360)
+
+const getDeviceModel = () => {
+  systemApi.getDeviceModel().then((res: any) => {
+    if (res.code === 0) {
+      deviceModel.value = res.data.model
+    } else {
+      ElMessage({
+        message: res.data,
+        type: "error",
+        duration: 3000,
+      })
+    }
+  })
+}
+
+const onSetDeviceModel = () => {
+  systemApi.setDeviceModel({model: Number(deviceModel.value)}).then((res: any) => {
+    if (res.code === 0) {
+      ElMessage({
+        message: '修改成功！',
+        type: 'success',
+        duration: 3000 // 显示时长，默认3000ms
+      })
+    } else {
+      ElMessage({
+        message: res.data,
+        type: 'error',
+        duration: 3000 // 显示时长，默认3000ms
+      })
+    }
+  })
+}
+
 onMounted(() => {
   getList()
   getSpeedList()
   getButtonGroupStatueList()
   getAllRegionProps()
+  getDeviceModel()
   statusStore.getSwitchStatus()
 })
 

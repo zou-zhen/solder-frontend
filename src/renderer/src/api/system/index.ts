@@ -26,6 +26,15 @@ const writeMode = (data) => {
 const orderMode = (data: { OrderDateTime: string }) => {
   return http.post('/mode/order_mode', data)
 }
+
+const getDeviceModel = () => {
+  return http.get('/system/device_model')
+}
+
+const setDeviceModel = (data) => {
+  return http.post('/system/device_model', data)
+}
+
 export default {
   getSettings,
   settings,
@@ -33,5 +42,7 @@ export default {
   runVideo,
   readMode,
   writeMode,
-  orderMode
+  orderMode,
+  getDeviceModel,
+  setDeviceModel,
 }
