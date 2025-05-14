@@ -9,6 +9,7 @@
             class="inputor"
             size="large"
             @blur="handleUpdateSpeed('X轴满载速度')"
+            @keypress="input_filter"
           ></el-input>
           <span class="label">Y轴满载速度：</span>
           <el-input
@@ -16,6 +17,7 @@
             class="inputor"
             size="large"
             @blur="handleUpdateSpeed('Y轴满载速度')"
+            @keypress="input_filter"
           ></el-input>
           <span class="label">Z轴满载速度：</span>
           <el-input
@@ -23,6 +25,7 @@
             class="inputor"
             size="large"
             @blur="handleUpdateSpeed('Z轴满载速度')"
+            @keypress="input_filter"
           ></el-input>
           <span class="label">R轴满载速度：</span>
           <el-input
@@ -30,6 +33,7 @@
             class="inputor"
             size="large"
             @blur="handleUpdateSpeed('R轴满载速度')"
+            @keypress="input_filter"
           ></el-input>
         </div>
         <div class="form-item">
@@ -180,12 +184,14 @@
                 <span>库位水平间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.入柜区.水平距离"
                 @blur="onSetRegionProp('入柜区', '水平距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.入柜区.竖直距离"
                 @blur="onSetRegionProp('入柜区', '竖直距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="margin-inside-card">
@@ -202,12 +208,14 @@
                 <span>库位水平间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.水平距离"
                 @blur="onSetRegionProp('冷藏区', '水平距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.竖直距离"
                 @blur="onSetRegionProp('冷藏区', '竖直距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="margin-inside-card">
@@ -224,12 +232,14 @@
                 <span>库位水平间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.回温区.水平距离"
                 @blur="onSetRegionProp('回温区', '水平距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.回温区.竖直距离"
                 @blur="onSetRegionProp('回温区', '竖直距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="margin-inside-card">
@@ -246,12 +256,14 @@
                 <span>库位水平间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.待取区.水平距离"
                 @blur="onSetRegionProp('待取区', '水平距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="label margin-inside-card">
                 <span>库位竖直间隔距离 </span>
                 <el-input class="inputor" size="large" v-model="allRegionProps.待取区.竖直距离"
                 @blur="onSetRegionProp('待取区', '竖直距离')"
+                @keypress="input_filter"
                 ></el-input>
               </div>
               <div class="margin-inside-card">
@@ -265,17 +277,21 @@
             <span>冷藏区1起始库位角度：</span>
             <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.区1角度"
             @blur="onSetRegionProp('冷藏区', '区1角度')"
+            @keypress="input_filter"
             ></el-input>
           </div>
           <div class="label margin-inside-card">
             <span>冷藏区2起始库位角度：</span>
             <el-input class="inputor" size="large" v-model="allRegionProps.冷藏区.区2角度"
             @blur="onSetRegionProp('冷藏区', '区2角度')"
+            @keypress="input_filter"
             ></el-input>
           </div>
           <div class="label margin-inside-card">
             <span>锡膏柜型号：</span>
-            <el-input class="inputor" size="large"></el-input>
+            <el-input class="inputor" size="large"
+            @keypress="input_filter"
+            ></el-input>
           </div>
         </div>
 
@@ -423,6 +439,8 @@ const allRegionProps = ref({
     竖直距离: "8",
   },
 })
+
+const input_filter = e => ['0','1','2','3','4','5','6','7','8','9','.'].includes(e.key) || e.preventDefault()
 
 const getAllRegionProps = () => {
   movementApi.getRegionProp().then((res: any) => {
