@@ -22,8 +22,8 @@
         <el-table-column prop="shelf_life" label="保质期(天)" />
         <el-table-column prop="if_jiaoban" label="首次出库是否搅拌" />
         <el-table-column prop="min_lc_time" label="最小冷藏时间（小时）" />
-        <el-table-column prop="out_chaoshi_auto_lc" label="出库超时自动冷藏（小时）" />
-        <el-table-column prop="out_chaoshi_auto_lc_times" label="出库超时自动冷藏次数" />
+        <!-- <el-table-column prop="out_chaoshi_auto_lc" label="出库超时自动冷藏（小时）" /> -->
+        <!-- <el-table-column prop="out_chaoshi_auto_lc_times" label="出库超时自动冷藏次数" /> -->
         <el-table-column label="搅拌后是否允许回冰柜">
           <template #default="scope">
             {{
@@ -36,26 +36,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="twice_chaoshi_jinzhi_in_binggui" label="二次超时禁入冰柜（小时）" />
-        <el-table-column prop="separator" label="分隔符" />
-        <el-table-column prop="model_start" label="型号起始位置" />
-        <el-table-column prop="model_separator_start" label="型号分隔符起始位置" />
-        <el-table-column prop="model_length" label="型号长度" />
-        <el-table-column prop="production_date_start" label="生产日期起始位置" />
-        <el-table-column prop="production_date_separator_start" label="生产日期分隔符起始位置" />
-        <el-table-column prop="production_date_length" label="生产日期长度" />
-        <el-table-column prop="shelf_life_start" label="保质期起始位置" />
-        <el-table-column prop="shelf_life_separator_start" label="保质期分隔符起始位置" />
-        <el-table-column prop="shelf_life_length" label="保质期长度" />
-        <el-table-column prop="expiration_date_start" label="有效期起始位置" />
-        <el-table-column prop="expiration_date_separator_start" label="有效期分隔符起始位置" />
-        <el-table-column prop="expiration_date_length" label="有效期长度" />
         <el-table-column prop="modify_datetime" label="修改时间" />
         <el-table-column fixed="right" label="操作" min-width="140">
           <template #default="scope">
             <el-button
               type="primary"
               size="large"
-              style="margin-right: 10px"
+              style="margin-right: 10px; margin-top: 10px"
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >

@@ -8,46 +8,6 @@
     :close-on-click-modal="false"
   >
     <el-form ref="formRef" :model="form" label-width="20%" label-position="left">
-      <!-- 新增的表单项 -->
-      <el-form-item label="分隔符">
-        <el-input v-model="form.separator" placeholder="请输入分隔符" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="型号起始位置">
-        <el-input v-model="form.model_start" placeholder="请输入型号起始位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="型号起始分隔符位置">
-        <el-input v-model="form.model_separator_start" placeholder="请输入型号起始分隔符位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="型号长度">
-        <el-input v-model="form.model_length" placeholder="请输入型号长度" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="生产日期起始位置">
-        <el-input v-model="form.production_date_start" placeholder="请输入生产日期起始位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="生产日期起始分隔符位置">
-        <el-input v-model="form.production_date_separator_start" placeholder="请输入生产日期起始分隔符位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="生产日期长度">
-        <el-input v-model="form.production_date_length" placeholder="请输入生产日期长度" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="保质期起始位置">
-        <el-input v-model="form.shelf_life_start" placeholder="请输入保质期起始位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="保质期起始分隔符位置">
-        <el-input v-model="form.shelf_life_separator_start" placeholder="请输入保质期起始分隔符位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="保质期长度">
-        <el-input v-model="form.shelf_life_length" placeholder="请输入保质期长度" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="过期日期起始位置">
-        <el-input v-model="form.expiration_date_start" placeholder="请输入过期日期起始位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="过期日期起始分隔符位置">
-        <el-input v-model="form.expiration_date_separator_start" placeholder="请输入过期日期起始分隔符位置" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="过期日期长度">
-        <el-input v-model="form.expiration_date_length" placeholder="请输入过期日期长度" clearable></el-input>
-      </el-form-item>
       <!-- 原有表单项 -->
       <el-form-item
         label="型号"
@@ -194,7 +154,7 @@
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item
+      <!-- <el-form-item
         label="出库超时自动冷藏（小时）"
         prop="out_chaoshi_auto_lc"
         :rules="[{ required: true, message: '请输入出库超时自动冷藏（小时）', trigger: 'blur' }]"
@@ -204,8 +164,8 @@
           :placeholder="'请输入出库超时自动冷藏（小时）'"
           clearable
         ></el-input>
-      </el-form-item>
-      <el-form-item
+      </el-form-item> -->
+      <!-- <el-form-item
         label="出库超时自动冷藏次数"
         prop="out_chaoshi_auto_lc_times"
         :rules="[{ required: true, message: '请输入出库超时自动冷藏次数', trigger: 'blur' }]"
@@ -215,7 +175,7 @@
           :placeholder="'请输入出库超时自动冷藏次数'"
           clearable
         ></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item
         label="搅拌后是否允许回冰柜"
         prop="lf_back_after_jiaoban"
