@@ -23,120 +23,147 @@
             >回安全点</el-button
           >
         </div>
-        <div class="box2">
-          <div class="control-button" type="primary"></div>
-
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('Y轴点动向前', 1)"
-            @touchend="sendData('Y轴点动向前', 2)"
-            @touchcancel="sendData('Y轴点动向前', 2)"
-            >Y+</el-button
-          >
-          <div class="control-button" type="primary"></div>
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('手动xy45度动作向上', 1)"
-            @touchend="sendData('手动xy45度动作向上', 2)"
-            @touchcancel="sendData('手动xy45度动作向上', 2)"
-            >XY+</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('Z轴点动向上', 1)"
-            @touchend="sendData('Z轴点动向上', 2)"
-            @touchcancel="sendData('Z轴点动向上', 2)"
-            >Z-</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R1轴点动正转', 1)"
-            @touchend="sendData('R1轴点动正转', 2)"
-            @touchcancel="sendData('R1轴点动正转', 2)"
-            >R1+</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R2轴点动正转', 1)"
-            @touchend="sendData('R2轴点动正转', 2)"
-            @touchcancel="sendData('R2轴点动正转', 2)"
-            >R2+</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('X轴点动向左', 1)"
-            @touchend="sendData('X轴点动向左', 2)"
-            @touchcancel="sendData('X轴点动向左', 2)"
-            >X+</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('Y轴点动向后', 1)"
-            @touchend="sendData('Y轴点动向后', 2)"
-            @touchcancel="sendData('Y轴点动向后', 2)"
-            >Y-</el-button
-          >
-
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('X轴点动向右', 1)"
-            @touchend="sendData('X轴点动向右', 2)"
-            @touchcancel="sendData('X轴点动向右', 2)"
-            >X-</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('手动xy45度动作向下', 1)"
-            @touchend="sendData('手动xy45度动作向下', 2)"
-            @touchcancel="sendData('手动xy45度动作向下', 2)"
-            >XY-</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('Z轴点动向下', 1)"
-            @touchend="sendData('Z轴点动向下', 2)"
-            @touchcancel="sendData('Z轴点动向下', 2)"
-            >Z+</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R1轴点动反转', 1)"
-            @touchend="sendData('R1轴点动反转', 2)"
-            @touchcancel="sendData('R1轴点动反转', 2)"
-            >R1-</el-button
-          >
-          <el-button
-            class="control-button"
-            type="primary"
-            :disabled="!statusStore.switchStatus"
-            @touchstart="sendData('R2轴点动反转', 1)"
-            @touchend="sendData('R2轴点动反转', 2)"
-            @touchcancel="sendData('R2轴点动反转', 2)"
-            >R2-</el-button
-          >
+        <div class="box2t">
+          <el-row>
+            <el-col :span="3">
+              <div class="control-button" type="primary"></div>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('Y轴点动向前', 1)"
+                @touchend="sendData('Y轴点动向前', 2)"
+                @touchcancel="sendData('Y轴点动向前', 2)"
+              >Y+</el-button>
+            </el-col>
+            <el-col :span="3">
+              <div class="control-button" type="primary"></div>
+            </el-col>
+            <el-col :span="1">
+              <div class="control-button" type="primary"></div>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('手动xy45度动作向上', 1)"
+                @touchend="sendData('手动xy45度动作向上', 2)"
+                @touchcancel="sendData('手动xy45度动作向上', 2)"
+                >XY+</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('Z轴点动向上', 1)"
+                @touchend="sendData('Z轴点动向上', 2)"
+                @touchcancel="sendData('Z轴点动向上', 2)"
+                >Z-</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('R1轴点动正转', 1)"
+                @touchend="sendData('R1轴点动正转', 2)"
+                @touchcancel="sendData('R1轴点动正转', 2)"
+                >R1+</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                v-show="isType360"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('R2轴点动正转', 1)"
+                @touchend="sendData('R2轴点动正转', 2)"
+                @touchcancel="sendData('R2轴点动正转', 2)"
+                >R2+</el-button>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('X轴点动向左', 1)"
+                @touchend="sendData('X轴点动向左', 2)"
+                @touchcancel="sendData('X轴点动向左', 2)"
+                >X+</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('Y轴点动向后', 1)"
+                @touchend="sendData('Y轴点动向后', 2)"
+                @touchcancel="sendData('Y轴点动向后', 2)"
+                >Y-</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('X轴点动向右', 1)"
+                @touchend="sendData('X轴点动向右', 2)"
+                @touchcancel="sendData('X轴点动向右', 2)"
+                >X-</el-button>
+            </el-col>
+            <el-col :span="1">
+              <div class="control-button" type="primary"></div>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('手动xy45度动作向下', 1)"
+                @touchend="sendData('手动xy45度动作向下', 2)"
+                @touchcancel="sendData('手动xy45度动作向下', 2)"
+                >XY-</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('Z轴点动向下', 1)"
+                @touchend="sendData('Z轴点动向下', 2)"
+                @touchcancel="sendData('Z轴点动向下', 2)"
+                >Z+</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('R1轴点动反转', 1)"
+                @touchend="sendData('R1轴点动反转', 2)"
+                @touchcancel="sendData('R1轴点动反转', 2)"
+                >R1-</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button
+                class="control-button"
+                type="primary"
+                v-show="isType360"
+                :disabled="!statusStore.switchStatus"
+                @touchstart="sendData('R2轴点动反转', 1)"
+                @touchend="sendData('R2轴点动反转', 2)"
+                @touchcancel="sendData('R2轴点动反转', 2)"
+                >R2-</el-button>
+            </el-col>
+          </el-row>
         </div>
+        
         <div class="box3">
           <div class="box3-single">
             <div style="font-weight: bold">指令型寸动</div>
@@ -269,6 +296,7 @@
               color: 'white',
               // borderColor: item.color,
             }"
+            v-show="item.isShow"
             @touchstart="onSetSport(item.action, 1, index, 'group2')"
             @touchend="onSetSport(item.action, 2, index, 'group2')"
           >
@@ -288,6 +316,7 @@
               color: 'white',
               // borderColor: item.color,
             }"
+            v-show="item.isShow"
             @touchstart="onSetSport(item.action, 1, index, 'group3')"
             @touchend="onSetSport(item.action, 2, index, 'group3')"
           >
@@ -320,7 +349,7 @@
               <span>R1(°/s):</span>
               <span>{{ paramsLocation.r1_location.toFixed(2) }}</span>
             </div>
-            <div class="box-content">
+            <div class="box-content" v-show="isType360">
               <span>R2(°/s):</span>
               <span>{{ paramsLocation.r2_location.toFixed(2) }}</span>
             </div>
@@ -345,11 +374,23 @@
               <span>J4(°/s):</span>
               <span>{{ paramsSpeed.r1_speed.toFixed(2) }}</span>
             </div>
-            <div class="box-content">
+            <div class="box-content" v-show="isType360">
               <span>J5(°/s):</span>
               <span>{{ paramsSpeed.r2_speed.toFixed(2) }}</span>
             </div>
           </div>
+        </div>
+        <div class="box1">
+          <el-button
+            size="large"
+            type="primary"
+            @click="() => {
+              isType360 = !isType360
+              statusStore.switchType()
+            }"
+          >
+            {{ isType360 ? "切换至180型号" : "切换至360型号" }}
+          </el-button>
         </div>
       </div>
     </div>
@@ -397,10 +438,12 @@ const paramsSpeed = ref({
 })
 
 const loading = ref(true)
+const isType360 = ref(statusStore.isType360)
 type CommandStatus = {
   action: string
   status: boolean
   color: string
+  isShow: boolean | typeof isType360
 }
 
 // const commands = ref<{
@@ -435,26 +478,26 @@ const commandsV2 = ref<{
   group2: CommandStatus[]
   group3: CommandStatus[]
 }>({
-  group1: [{ action: '回原位按钮', status: true, color: '' }],
+  group1: [{ action: '回原位按钮', status: true, color: '', isShow: true, }],
   group2: [
-    { action: '模组夹爪气缸动作', status: true, color: '#4A6FB1' },
-    { action: '模组180度旋转气缸动作', status: true, color: '#F39C12' },
-    { action: '模组45度旋转气缸动作', status: true, color: '#4A6FB1' },
-    { action: '冰箱门1推拉动作', status: true, color: '#F39C12' },
-    { action: '冰箱门1滑台动作', status: true, color: '#F39C12' },
-    { action: '冰箱门2推拉动作', status: true, color: '#4A6FB1' },
-    { action: '冰箱门2滑台动作', status: true, color: '#4A6FB1' },
-    { action: '出库滑台动作', status: true, color: '#F39C12' }
+    { action: '模组夹爪气缸动作', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '模组180度旋转气缸动作', status: true, color: '#F39C12', isShow: true, },
+    { action: '模组45度旋转气缸动作', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '出库滑台动作', status: true, color: '#F39C12', isShow: true, },
+    { action: '冰箱门1推拉动作', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '冰箱门1滑台动作', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '冰箱门2推拉动作', status: true, color: '#F39C12', isShow: isType360, },
+    { action: '冰箱门2滑台动作', status: true, color: '#F39C12', isShow: isType360, },
   ],
   group3: [
-    { action: '模组夹爪气缸复位', status: true, color: '#4A6FB1' },
-    { action: '模组180度旋转气缸复位', status: true, color: '#F39C12' },
-    { action: '模组45度旋转气缸复位', status: true, color: '#4A6FB1' },
-    { action: '冰箱门1推拉复位', status: true, color: '#F39C12' },
-    { action: '冰箱门1滑台复位', status: true, color: '#F39C12' },
-    { action: '冰箱门2推拉复位', status: true, color: '#4A6FB1' },
-    { action: '冰箱门2滑台复位', status: true, color: '#4A6FB1' },
-    { action: '出库滑台复位', status: true, color: '#F39C12' }
+    { action: '模组夹爪气缸复位', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '模组180度旋转气缸复位', status: true, color: '#F39C12', isShow: true, },
+    { action: '模组45度旋转气缸复位', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '出库滑台复位', status: true, color: '#F39C12', isShow: true, },
+    { action: '冰箱门1推拉复位', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '冰箱门1滑台复位', status: true, color: '#4A6FB1', isShow: true, },
+    { action: '冰箱门2推拉复位', status: true, color: '#F39C12', isShow: isType360, },
+    { action: '冰箱门2滑台复位', status: true, color: '#F39C12', isShow: isType360, },
   ]
 })
 
@@ -780,6 +823,19 @@ onUnmounted(() => {
       }
     }
 
+    .box2t {
+      width: 94%;
+      border: 1px solid grey;
+      padding: 30px;
+
+      .control-button {
+        width: 85%;
+        height: 160px;
+        border: 30px;
+        font-size: 28px;
+      }
+    }
+
     .box3 {
       width: 94%;
       height: 20%;
@@ -875,5 +931,17 @@ onUnmounted(() => {
 .el-button {
   margin: 0;
 }
+
+.el-row {
+  margin-bottom: 20px;
+}
+
+.el-row:last-child {
+  margin-bottom: 0;
+}
+
+.el-col {
+  border-radius: 4px;
+}
+
 </style>
-s

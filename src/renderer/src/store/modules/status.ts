@@ -27,7 +27,8 @@ export const useStatusStore = defineStore('status', {
   state: () => ({
     switchStatus: true,
     mode: 1 as 0 | 1,
-    is_stiring: false
+    is_stiring: false,
+    isType360: false,
   }),
   getters: {
     modeName(state) {
@@ -125,6 +126,9 @@ export const useStatusStore = defineStore('status', {
           })
         }
       })
+    },
+    async switchType() {
+      this.isType360 = !this.isType360
     }
   }
 })
